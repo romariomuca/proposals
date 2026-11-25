@@ -71,10 +71,13 @@ button{font:inherit;cursor:pointer}
 .side h4{font-size:15px;font-weight:600;letter-spacing:.3px;margin:28px 0 6px;padding-top:10px;border-top:1px solid var(--ink);text-transform:uppercase}
 .side .lat a{display:block;font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:16px;line-height:1.35;padding:12px 0;border-bottom:1px solid var(--rule)}
 /* follow */
-.myit{border-bottom:1px solid var(--rule);padding:18px 0;display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
-.myit h3{font-family:'Source Serif 4',Georgia,serif;font-size:22px;margin:0 0 4px}
-.myit p{margin:0;color:var(--soft);font-size:14px}
+.myit{background:#000;color:#fff;border-radius:6px;margin:20px 0 4px;padding:24px 28px;display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.myit h3{font-family:'Source Serif 4',Georgia,serif;font-size:26px;margin:0 0 4px;color:#fff}
+.myit p{margin:0;color:#bdbdb8;font-size:14px}
 .myit .left{flex:0 0 280px}
+.myit .chip{background:transparent;color:#fff;border-color:#5a5a57}
+.myit .chip:hover{border-color:#fff}
+.myit .chip.on{background:var(--yellow);color:#000;border-color:var(--yellow)}
 .chips{display:flex;gap:8px;flex-wrap:wrap;flex:1;align-items:center}
 .chip{border:1px solid #c9c9c4;background:#fff;border-radius:20px;padding:8px 14px;font-size:14px;font-weight:600;min-height:40px}
 .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -82,7 +85,9 @@ button{font:inherit;cursor:pointer}
 .fy{border-top:2px solid var(--ink);padding-top:10px}
 .fy .kick{margin-bottom:4px}
 .fy h4{font-family:'Source Serif 4',Georgia,serif;font-size:18px;line-height:1.25;margin:0}
-.dg{display:inline-flex;gap:8px;align-items:center;margin-top:14px;font-size:14px;font-weight:600;border-bottom:1px solid var(--ink)}
+.dg{display:inline-flex;gap:12px;align-items:center;font-size:15px;font-weight:600;color:#fff;border:1px solid #fff;border-radius:24px;padding:10px 18px 10px 14px;min-height:48px;flex:none}
+.dg svg{width:26px;height:26px;flex:none}
+.dg:hover{background:#fff;color:#000}
 .follow{border:1px solid var(--ink);background:#fff;border-radius:20px;padding:6px 14px;font-size:14px;font-weight:600;margin-left:10px;min-height:36px}
 .follow.on{background:var(--ink);color:#fff}
 .inbox{max-width:1100px;margin:20px auto 80px;height:min(760px,calc(100vh - 220px));border:1px solid var(--rule);border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.10);display:flex;min-height:640px;background:#fff}
@@ -119,7 +124,8 @@ button{font:inherit;cursor:pointer}
 .mail .sec h5{font-size:12px;letter-spacing:.5px;text-transform:uppercase;margin:0 0 10px;color:var(--blue)}
 .mail .sec a{display:block;font-family:'Source Serif 4',Georgia,serif;font-size:19px;font-weight:600;line-height:1.3;padding:6px 0}
 .mail .foot{padding:16px 24px;font-size:13px;color:var(--mute);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-@media(max-width:1000px){.foryou{grid-template-columns:1fr}.myit .left{flex:1 1 100%}}
+@media(max-width:1000px){.myit .left,.myit .chips{flex:1 1 100%}.myit{padding:22px 20px;gap:18px}}
+.chip{white-space:nowrap}
 /* chat */
 .launcher{position:fixed;right:24px;bottom:24px;width:64px;height:64px;border-radius:50%;background:#000;color:#fff;border:0;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(0,0,0,.25);z-index:45;transition:transform .15s}
 .launcher:hover{transform:scale(1.05)}
@@ -193,10 +199,9 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
  </div>
  <nav class="nav"><span>Latest</span><span>Ireland</span><span>World</span><span>Opinion</span><span>Business</span><span>Sport</span><span>Politics</span><span>Culture</span><span>Your Money</span><span>Property</span><span>Food</span><span>Life &amp; Style</span></nav>
  <section class="myit" id="myit">
-  <div class="left"><h3>My Irish Times</h3><p id="myithint">Follow the topics you care about. We’ll build you a front page and a Friday digest.</p></div>
+  <div class="left"><h3>My Irish Times</h3><p id="myithint">Follow the topics you care about. We’ll send you a Friday digest.</p></div>
   <div class="chips" id="chips"></div>
-  <div class="foryou" id="foryou" hidden></div>
-  <a class="dg" id="dglink" href="#digest" hidden>✉ See the Friday email you’d get →</a>
+  <a class="dg" id="dglink" href="#digest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>Your Friday email →</a>
  </section>
  <section class="front">
   <div>
@@ -347,13 +352,10 @@ const IMG={Housing:['flats','city'],Rugby:['stadium','pitch'],'Your Money':['pap
 const DEK=['A short sample summary, written for this prototype.','What it means for you, in two minutes.','The background you need, explained simply.'];
 let fol=[];try{fol=JSON.parse(localStorage.getItem('it-follow')||'[]')}catch(e){}
 function saveF(){try{localStorage.setItem('it-follow',JSON.stringify(fol))}catch(e){}}
-function toggleF(t){fol=fol.includes(t)?fol.filter(x=>x!==t):[...fol,t];saveF();renderF();if(fol.includes(t))toast('Following '+t+'. It’s now on your front page and in your Friday digest.')}
+function toggleF(t){fol=fol.includes(t)?fol.filter(x=>x!==t):[...fol,t];saveF();renderF()}
 function renderF(){
  $('#chips').innerHTML=Object.keys(TOP).map(t=>`<button type="button" class="chip${fol.includes(t)?' on':''}" data-chip="${esc(t)}">${fol.includes(t)?'✓ ':'+ '}${esc(t)}</button>`).join('');
  const has=fol.length>0;
- $('#foryou').hidden=!has;$('#dglink').hidden=!has;
- $('#myithint').textContent=has?'Your front page, from the '+fol.length+' topic'+(fol.length>1?'s':'')+' you follow.':'Follow the topics you care about. We’ll build you a front page and a Friday digest.';
- $('#foryou').innerHTML=fol.slice(0,3).map(t=>`<a class="fy story" href="#article"><p class="kick">For you · ${esc(t)}</p><h4>${esc(TOP[t][0])}</h4></a>`).join('');
  document.querySelectorAll('[data-follow]').forEach(b=>{const on=fol.includes(b.dataset.follow);b.classList.toggle('on',on);b.textContent=on?'✓ Following':'+ Follow'});
  $('#subj2').textContent=has?fol.join(', '):'your topics';
  $('#subj').textContent=has?'Your Friday digest: '+fol.join(', '):'Your Friday digest';
