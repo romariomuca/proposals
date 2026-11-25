@@ -444,7 +444,7 @@ body.notes .crumb{margin-top:14px}
 
 <footer class="pad">
   <div>ROMY · Romario Muça, UX/UI &amp; Product Designer</div>
-  <div class="links"><a href="mailto:romario.muca@gmail.com">romario.muca@gmail.com</a><a href="tel:+393475073092">+39 347 507 3092</a><a id="pfLink" target="_blank" rel="noopener">Portfolio ↗</a></div>
+  <div class="links"><a href="mailto:romario.muca@gmail.com">romario.muca@gmail.com</a><a href="tel:+393475073092">+39 347 507 3092</a></div>
 </footer>
 
 <button class="notesbtn nu" id="notesBtn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -471,7 +471,6 @@ body.notes .crumb{margin-top:14px}
 
 <script>
 {
-const PORTFOLIO_URL = "https://romario-portfolio.lovable.app";
 const EMAIL = "romario.muca@gmail.com";
 const BAG = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 5h10l-.8 9H3.8z"/><path d="M5.5 5V4a2.5 2.5 0 0 1 5 0v1"/></svg>';
 const MARK = '<svg viewBox="0 0 13 16" fill="none" stroke="#1A1A1A" stroke-width="1.2"><path d="M1 1h11v14l-5.5-4L1 15z"/></svg>';
@@ -652,14 +651,8 @@ function renderProduct(id){
   $('#pview').innerHTML=`
   <div class="crumb"><a href="#shop">Home</a> <span>/</span> <a href="#shop">Skills</a> <span>/</span> ${p.name}</div>
   <div class="pv">
-    <div class="galwrap" data-note="Swipeable gallery with front and back of the pack: product pages are advised to offer several images.">
-      <div class="gal" id="gal" tabindex="0" aria-label="Product images">
-        <div class="shot">${p.tag?`<span class="badge">${p.tag}</span>`:''}${art(p)}</div>
-        <div class="shot">${backLabel(p,true)}</div>
-      </div>
-      <div class="galnav"><div class="dots" id="galDots"><button class="on" aria-label="Front of pack"><i></i></button><button aria-label="Back of pack"><i></i></button></div>
-        <span class="mute" id="galCount">1 / 2 · Front</span>
-        <div class="arrows"><button id="galPrev" aria-label="Previous image">‹</button><button id="galNext" aria-label="Next image">›</button></div></div>
+    <div class="galwrap" data-note="One large, close-up product photo on a calm background: the product is the hero of the page and readable at a glance.">
+      <div class="shot">${p.tag?`<span class="badge">${p.tag}</span>`:''}${art(p)}</div>
     </div>
     <div class="pvi">
       <div class="top"><div><h1>${p.name}</h1><div class="price" data-note="Full price shown up front. Extra costs are the #1 reason for checkout abandonment (40%, Baymard).">${PRICE}</div></div>
@@ -715,13 +708,6 @@ function renderProduct(id){
   };
   $('#pvSave').onclick=()=>{saved.has(id)?saved.delete(id):saved.add(id);$('#pvSave').classList.toggle('on',saved.has(id));$('#savedCount').textContent=saved.size;renderCats();toast(saved.has(id)?p.name+' saved':'Removed from saved');};
   root.querySelectorAll('.rel .card').forEach(c=>{c.onclick=()=>{location.hash='p-'+c.dataset.id;};c.onkeydown=e=>{if(e.key==='Enter')location.hash='p-'+c.dataset.id;};});
-  const gal=$('#gal'), dots=[...$('#galDots').children];
-  const go=i=>gal.scrollTo({left:i*gal.clientWidth});
-  const cur=()=>Math.round(gal.scrollLeft/Math.max(1,gal.clientWidth));
-  gal.addEventListener('scroll',()=>{const i=cur();dots.forEach((d,k)=>d.classList.toggle('on',k===i));$('#galCount').textContent=`${i+1} / 2 · ${i?'Back':'Front'}`;},{passive:true});
-  dots.forEach((d,k)=>d.onclick=()=>go(k));
-  $('#galPrev').onclick=()=>go(Math.max(0,cur()-1)); $('#galNext').onclick=()=>go(Math.min(1,cur()+1));
-  gal.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();go(Math.min(1,cur()+1));} if(e.key==='ArrowLeft'){e.preventDefault();go(Math.max(0,cur()-1));}});
   if(p.demo==='color') initColor();
   if(p.demo==='type') initType();
 }
@@ -853,7 +839,6 @@ function placeOrder(){
     <div class="acts">
       <a class="btn" href="${mail}">Send the order to Romario</a>
       <button class="btn ghost" id="copyOrder">Copy order text</button>
-      <a class="btn ghost" href="${PORTFOLIO_URL}" target="_blank" rel="noopener">View full portfolio</a>
     </div>
     <p class="sub" style="margin-top:16px">Email doesn't open? Write to ${EMAIL} or call +39 347 507 3092.</p></div>`;
   $('#copyOrder').onclick=async()=>{try{await navigator.clipboard.writeText(body);toast('Order copied');}catch(e){toast('Copy blocked: write to '+EMAIL);}};
@@ -950,7 +935,7 @@ $('#notesBtn').onclick=e=>{
   $('#notesLbl').textContent=notesOn?'Hide designer notes':'Designer notes';
   if(notesOn){refreshPins(); tick(); toast('Tap a numbered pin to read the note');} else {closeNote(); for(const p of pinFor.values()) p.hidden=true;}
 };
-$('#pfLink').href=PORTFOLIO_URL;
+
 route();
 }
 </script>
