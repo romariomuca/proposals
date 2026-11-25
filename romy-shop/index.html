@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ROMY — all skills</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Manrope:wght@400;700&family=Space+Mono&family=Playfair+Display:wght@700&family=Syne:wght@700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'Open Sauce Sans';font-style:normal;font-weight:300;font-display:swap;src:url(fonts/open-sauce-sans-300.woff2) format('woff2')}
+@font-face{font-family:'Open Sauce Sans';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/open-sauce-sans-400.woff2) format('woff2')}
+@font-face{font-family:'Open Sauce Sans';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/open-sauce-sans-500.woff2) format('woff2')}
+@font-face{font-family:'Mioya';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/mioya-400.woff2) format('woff2')}
+@font-face{font-family:'Mioya VF';font-style:normal;font-weight:100 1000;font-display:swap;src:url(fonts/mioya-vf.woff2) format('woff2')}
+/*
+VOICE   quiet gallery-shop, like an art-poster store
+IDEA    a D2C catalogue where the products are skills
+PICTURE packaging drawn in SVG on soft grey "wall" tiles
+COLOUR  white ground, near-black type, grey tiles; red only for badges and prices
+TYPE    Open Sauce Sans, small sizes, generous space
+*/
+:root{--bg:#fff;--tile:#EFEDEA;--ink:#1A1A1A;--mute:#707070;--line:#E6E6E6;--red:#C8102E;--badge:#6B0F12;--sans:'Open Sauce Sans',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:13.5px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+a{color:inherit;text-decoration:none}
+.pad{padding-left:24px;padding-right:24px}
+.mute{color:var(--mute)}
+
+/* announcement + header */
+.ann{position:relative;text-align:center;font-size:12px;background:var(--ink);color:#CFCFCF;padding:8px 44px}
+.ann b{font-weight:500;color:#fff}
+.ann button{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:17px;color:#fff;width:32px;height:32px}
+body.notes .ann[data-note]{outline-color:#555;outline-offset:-3px}
+header{position:sticky;top:0;z-index:40;background:#fff}
+.nav{display:grid;grid-template-columns:200px 1fr auto;align-items:center;height:56px}
+.logo{font-family:'Mioya VF','Mioya',Georgia,serif;font-size:26px;font-weight:540;letter-spacing:.02em;line-height:1;text-transform:uppercase}
+.nav .l,.nav .r{display:flex;gap:24px;list-style:none;font-size:13px}
+.nav .r{gap:16px}
+.nav a:hover,.nav button:hover{opacity:.6}
+.nav .l a.cur{text-decoration:underline;text-underline-offset:5px}
+.crumb{font-size:12.5px;padding-top:14px}
+.crumb span{color:var(--mute)}
+
+/* intro */
+.intro{padding-top:36px;max-width:900px}
+.intro h1{font-size:13.5px;font-weight:400;margin-bottom:10px}
+.intro p{font-size:13.5px;line-height:1.65}
+.facts-row{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:18px;font-size:12.5px}
+.facts-row div span{color:var(--mute);margin-right:6px}
+.cats{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:28px;font-size:12.5px}
+.cats button{color:var(--ink)}
+.cats button.on{text-decoration:underline;text-underline-offset:4px}
+.cats button sup{color:var(--mute);font-size:10.5px;margin-left:3px;vertical-align:4px}
+.cats button:hover{opacity:.6}
+
+.tools{display:flex;justify-content:space-between;align-items:center;margin:56px 0 18px;font-size:12.5px}
+.tools .view{display:flex;align-items:center;gap:8px}
+.tools .view i{display:grid;grid-template-columns:5px 5px;gap:2px}
+.tools .view i b{width:5px;height:5px;border:1px solid var(--ink)}
+.tools .rt{display:flex;gap:20px;align-items:center}
+.tools select{font:inherit;color:var(--ink);background:transparent;border:0;cursor:pointer;appearance:none}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:56px 16px}
+.grid.big{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{cursor:pointer}
+.tile{position:relative;aspect-ratio:4/5;background:var(--tile);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.tile svg.pk{height:56%;width:auto;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.card:hover .tile svg.pk{transform:scale(1.04)}
+.badge{position:absolute;top:8px;left:7px;background:var(--badge);color:#fff;font-size:11.5px;padding:2px 8px}
+.bag{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background:#fff;display:grid;place-items:center;transition:transform .2s}
+.bag:hover{transform:scale(1.08)}
+.bag{color:var(--ink);transition:transform .2s,background .25s,color .25s}
+.bag.in{background:var(--ink);color:#fff}
+.bag::after{content:"";position:absolute;inset:-6px}
+.bag svg{width:15px;height:15px}
+.meta{display:grid;grid-template-columns:1fr auto;margin-top:10px;align-items:start}
+.meta h3{font-size:13.5px;font-weight:400}
+.price{font-size:11.5px;margin-top:8px}
+.price s{color:var(--mute);margin-right:5px}
+.price b{font-weight:400;color:var(--red)}
+.save{margin-top:18px;margin-right:-6px;width:32px;height:32px;display:grid;place-items:center}
+.save svg{width:13px;height:15px}
+.save.on svg path{fill:var(--ink)}
+.empty-grid{grid-column:1/-1;padding:60px 0;color:var(--mute)}
+
+/* hover preview: back of the pack */
+.tile .alt{position:absolute;inset:0;opacity:0;transition:opacity .35s ease;z-index:1}
+.card:hover .tile .alt,.card:focus-visible .tile .alt{opacity:1}
+.badge,.bag{z-index:2}
+.back{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--c) 16%,#E6DED3)}
+.tile .alt .back{background:rgba(226,218,207,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.lab{background:#F6F0E4}
+.lab{width:66%;background:#F6F0E4;padding:14px 14px 12px;font-size:10px;line-height:1.45;box-shadow:0 10px 24px -14px rgba(0,0,0,.35)}
+.lab .lh{display:flex;justify-content:space-between;border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:8px}
+.lab .lh b{font-family:'Mioya VF','Mioya',Georgia,serif;font-weight:540;font-size:12px;letter-spacing:.04em}
+.lab .lh span{color:var(--mute)}
+.lab h4{font-weight:500;font-size:12.5px;line-height:1.2}
+.lab .lt{color:#4A4A4A;margin:3px 0 8px}
+.lab .lr{border-top:1px solid var(--line);padding:5px 0}
+.lab .lr span{display:block;color:var(--mute);font-size:9px;text-transform:uppercase;letter-spacing:.06em}
+.back.big .lab{width:min(60%,360px);padding:26px 24px 20px;font-size:13px}
+.back.big .lab .lh b{font-size:18px}.back.big .lab h4{font-size:20px}.back.big .lab .lr span{font-size:10.5px}
+
+.tile{container-type:inline-size}
+@container (max-width:280px){.lab{width:80%;padding:10px}.lab .lt,.lab .lr+.lr{display:none}}
+/* photos */
+img.ph{display:block;width:100%;height:100%;object-fit:cover}
+.tile img.ph{position:absolute;inset:0;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.card:hover .tile img.ph{transform:scale(1.04)}
+.shot img.ph{position:absolute;inset:0}
+.lineup{display:block;padding:0;min-height:0;aspect-ratio:1024/688;align-self:center;overflow:hidden;background:var(--tile)}
+.lu{aspect-ratio:4/5;background:var(--tile);overflow:hidden}
+.item .th{padding:0;overflow:hidden}.xs button .th{overflow:hidden}
+.done .pks div{overflow:hidden}
+/* product page */
+#pview{padding-top:0}
+.pv{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,7vw,120px);margin-top:18px}
+.galwrap{position:relative;align-self:start}
+.gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;scroll-behavior:smooth}
+.gal::-webkit-scrollbar{display:none}
+.gal .shot{flex:0 0 100%;scroll-snap-align:start}
+.galnav{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:12.5px}
+.galnav .dots{display:flex;gap:6px}
+.galnav .dots button{width:28px;height:28px;display:grid;place-items:center}
+.galnav .dots button i{display:block;width:18px;height:2px;background:var(--line)}
+.galnav .dots button.on i{background:var(--ink)}
+.galnav .arrows{display:flex;gap:4px}
+.galnav .arrows button{width:40px;height:40px;border:1px solid var(--line);display:grid;place-items:center;font-size:16px}
+.galnav .arrows button:hover{border-color:var(--ink)}
+.shot{position:relative;aspect-ratio:4/5;background:var(--tile);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.shot>svg.pk{height:58%;width:auto}
+.pvi{position:sticky;top:76px;align-self:start;padding-top:10px}
+.pvi .top{display:grid;grid-template-columns:1fr auto;align-items:start}
+.pvi h1{font-size:15px;font-weight:400}
+.pvi .price{margin-top:4px;font-size:12.5px}
+.pvi .save{margin-top:0}
+.pvi .lede{margin:18px 0 6px;line-height:1.6}
+.pvi .lede u{text-underline-offset:3px}
+.lbl{display:flex;justify-content:space-between;align-items:center;margin:22px 0 10px;font-size:12.5px}
+.fmt{display:flex;gap:6px;flex-wrap:wrap}
+.fmt button{padding:9px 12px;font-size:12.5px;text-align:left;line-height:1.35;min-height:44px;border:1px solid transparent}
+.fmt button small{display:block;font-size:11px;color:var(--mute)}
+.fmt button.on{background:var(--ink);color:#fff}.fmt button.on small{color:#C9C9C9}
+.fmt button:not(.on):hover{border-color:var(--line)}
+.xs{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px;scrollbar-width:none}
+.xs::-webkit-scrollbar{display:none}
+.xs button{flex:0 0 92px;scroll-snap-align:start;text-align:left;font-size:11.5px;line-height:1.35;padding:6px;border:1px solid transparent}
+.xs button .th{aspect-ratio:1;background:var(--tile);display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.xs button .th svg{height:70%;width:auto}
+.xs button .th.none{background:#DADADA}
+.xs button.on{background:var(--ink);color:#fff}
+.xs button s{color:var(--mute)}.xs button.on s{color:#BBB}
+.xbar{height:2px;background:var(--line);margin-bottom:22px}.xbar i{display:block;height:2px;background:var(--ink);width:30%}
+.pvi .btn.wide{width:100%;padding:14px}
+.payrow{display:flex;flex-wrap:wrap;gap:4px 16px;justify-content:space-between;font-size:12px;margin:10px 0 18px;color:#4A4A4A}
+.svc{border-top:1px solid var(--line)}
+.svc a,.svc div.r{display:grid;grid-template-columns:26px 1fr auto;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+.svc small{display:block;color:var(--mute)}
+.svc svg{width:16px;height:16px}
+.acc details{border-bottom:1px solid var(--line);padding:14px 0}
+.acc summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;font-size:12.5px}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:"+";font-size:16px;line-height:1}
+.acc details[open] summary::after{content:"–"}
+.acc .inner{padding-top:10px;font-size:12.5px;color:#4A4A4A}
+.acc .inner .demo{color:var(--ink)}
+.rel h2{font-size:13.5px;font-weight:400;margin:36px 0 12px}
+.rel .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 10px}
+.rel .meta h3{font-size:12.5px}
+.crumb a{color:var(--mute)}.crumb a:hover{color:var(--ink)}
+@media (max-width:900px){.pv{grid-template-columns:1fr}.pvi{position:static}}
+
+/* sections */
+.sec{padding-top:110px}
+.sec h2{font-size:13.5px;font-weight:400;margin-bottom:10px}
+.sec .lead{max-width:640px;line-height:1.65}
+.bundle{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px;align-items:stretch}
+.bundle ol{list-style:none;margin:26px 0 26px}
+.bundle li{display:grid;grid-template-columns:24px 1fr;padding:9px 0;border-top:1px solid var(--line)}
+.bundle li:last-child{border-bottom:1px solid var(--line)}
+.bundle li small{display:block;color:var(--mute);font-size:12.5px}
+.bundle .pline{font-size:12.5px;margin-bottom:16px}
+.bundle .pline s{color:var(--mute);margin-right:6px}.bundle .pline b{font-weight:400;color:var(--red)}
+.lineup{background:var(--tile);display:flex;align-items:center;justify-content:center;gap:clamp(4px,1.4vw,16px);padding:40px 24px;min-height:340px}
+.lineup svg{height:clamp(110px,15vw,200px);width:auto}
+.btn{display:inline-block;background:var(--ink);color:#fff;font-size:12.5px;padding:12px 22px;transition:opacity .2s;text-align:center}
+.btn:hover{opacity:.8}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+.btn:disabled{opacity:.3;pointer-events:none}
+
+.quiz .q{font-size:22px;font-weight:400;letter-spacing:-.01em;margin:18px 0 22px;line-height:1.25;max-width:640px}
+.opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.opt{background:var(--tile);padding:20px 18px;text-align:left;min-height:120px;display:flex;flex-direction:column;justify-content:space-between;transition:background .2s}
+.opt:hover{background:#E6E3DF}
+.opt b{font-weight:400;font-size:14px}
+.opt small{color:var(--mute);font-size:12.5px}
+.recs{display:flex;flex-wrap:wrap;gap:6px 18px;margin:6px 0 18px;font-size:14px}
+
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px}
+.facts{margin-top:18px}
+.facts div{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-top:1px solid var(--line)}
+.facts div:last-child{border-bottom:1px solid var(--line)}
+.facts span{color:var(--mute)}
+.fine{font-size:11.5px;color:var(--mute);margin-top:12px}
+.faq{max-width:760px}
+.faq details{border-top:1px solid var(--line);padding:12px 0}
+.faq details:last-child{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--mute)}
+.faq details[open] summary::after{content:"–"}
+.faq p{margin-top:8px;color:#4A4A4A;max-width:46em}
+
+footer{margin-top:120px;border-top:1px solid var(--line);padding-top:22px;padding-bottom:80px;display:grid;grid-template-columns:1fr auto;gap:20px;font-size:12.5px}
+footer .links{display:flex;gap:20px;flex-wrap:wrap}
+footer a:hover{opacity:.6}
+
+/* drawer + modal */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.18);opacity:0;pointer-events:none;transition:opacity .3s;z-index:60}
+.overlay.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(420px,100%);background:#fff;z-index:70;transform:translateX(100%);transition:transform .35s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+.drawer.on{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:0 24px;height:56px}
+.x{font-size:13px}.x:hover{opacity:.6}
+.ship{padding:0 24px 16px;font-size:12.5px;color:#4A4A4A}
+.ship .bar2{height:2px;background:var(--line);margin-top:10px}
+.ship .bar2 i{display:block;height:2px;background:var(--ink);transition:width .4s}
+.items{flex:1;overflow:auto;padding:0 24px}
+.item{display:grid;grid-template-columns:70px 1fr auto;gap:14px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.item .th{aspect-ratio:4/5;background:var(--tile);display:flex;align-items:center;justify-content:center}
+.item .th svg{height:62%;width:auto}
+.item b{display:block;font-weight:400}
+.item small{color:var(--mute);font-size:12px}
+.item .rm{font-size:12px;color:var(--mute);text-decoration:underline}
+.empty{padding:50px 0;color:var(--mute)}
+.df{padding:18px 24px;border-top:1px solid var(--line)}
+.tot{display:flex;justify-content:space-between;margin-bottom:14px}
+.tot b{font-weight:400;color:var(--red)}
+.df .btn{width:100%}
+
+.modal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:20px;pointer-events:none}
+.box{background:#fff;width:min(1040px,100%);max-height:92vh;overflow:auto;position:relative;opacity:0;transform:translateY(12px);transition:all .3s}
+.modal.on{pointer-events:auto}.modal.on .box{opacity:1;transform:none}
+.box>.x{position:absolute;top:14px;right:20px;z-index:2}
+.pdp{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+.pdp .vis{background:var(--tile);display:flex;align-items:center;justify-content:center;min-height:560px;position:relative}
+.pdp .vis svg{height:58%;max-height:380px;width:auto}
+.pdp .det{padding:44px 36px 36px}
+.pdp h3{font-size:22px;font-weight:400;letter-spacing:-.01em}
+.pdp .price{font-size:13px;margin:4px 0 20px}
+.pdp .tl{font-size:14px;margin-bottom:8px}
+.pdp .desc{color:#4A4A4A;margin-bottom:18px}
+.ingr{font-size:12.5px;margin-bottom:22px}
+.ingr span{color:var(--mute);display:block}
+.ptype{display:grid;gap:8px;margin-bottom:16px}
+.ptype label{display:grid;grid-template-columns:18px 1fr;gap:10px;padding:12px 14px;border:1px solid var(--line);cursor:pointer;transition:border-color .2s}
+.ptype label:has(input:checked){border-color:var(--ink)}
+.ptype input{accent-color:var(--ink);margin-top:4px}
+.ptype small{display:block;color:var(--mute);font-size:12px}
+.ptype em{font-style:normal;color:var(--red);font-size:11.5px;margin-left:6px}
+.pdp .btn{width:100%}
+.proof{margin-top:24px;font-size:12.5px}
+.proof>span{color:var(--mute)}
+.proof li{list-style:none;padding:7px 0;border-top:1px solid var(--line)}
+.proof li:last-child{border-bottom:1px solid var(--line)}
+
+.demo{margin-top:22px;background:#F7F6F4;padding:16px}
+.demo>span{display:block;color:var(--mute);font-size:12px;margin-bottom:10px}
+.pal{display:flex;gap:8px;margin-bottom:12px}
+.pal button{width:26px;height:26px;border-radius:50%;outline:1px solid transparent;outline-offset:3px}
+.pal button.on{outline-color:var(--ink)}
+.mock{padding:16px;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:all .3s}
+.mock b{font-weight:500;font-size:17px;display:block}
+.mock span{font-size:12px;opacity:.85}
+.mock .mbtn{padding:8px 12px;font-size:12px;transition:all .3s;white-space:nowrap}
+.cr{font-size:12px;margin-top:10px}
+.ok{color:#2E6B4A}.ko{color:var(--red)}
+.tp{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;font-size:12.5px}
+.tp button{color:var(--mute)}
+.tp button.on{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
+.tmock{background:#fff;padding:18px}
+.tmock .h{font-size:26px;line-height:1.05;margin-bottom:6px}
+.tmock .b{font-size:13.5px;color:#666}
+.tmock .why{font-size:12px;margin-top:10px;color:var(--mute)}
+
+.co{padding:48px 40px;max-width:560px;margin:0 auto}
+.co h3{font-size:22px;font-weight:400}
+.co .sub{color:var(--mute);margin:6px 0 24px}
+.field{display:grid;gap:4px;margin-bottom:14px}
+.field label{font-size:12px;color:var(--mute)}
+.field input,.field select,.field textarea{font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:0}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.summary{margin:20px 0}
+.summary div{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line)}
+.summary .t{border-bottom:1px solid var(--line)}.summary .t span:last-child{color:var(--red)}
+.co .btn{width:100%}
+.done{text-align:center}
+.done .pks{display:flex;justify-content:center;gap:8px;margin-bottom:22px}
+.done .pks div{width:70px;aspect-ratio:4/5;background:var(--tile);display:flex;align-items:center;justify-content:center;animation:rise .5s cubic-bezier(.2,.8,.2,1) backwards}
+.done .pks svg{height:62%;width:auto}
+@keyframes rise{from{transform:translateY(14px);opacity:0}}
+.acts{display:grid;gap:8px;margin-top:22px}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,100px);background:var(--ink);color:#fff;padding:10px 18px;font-size:12.5px;z-index:95;transition:transform .35s}
+.toast.on{transform:translate(-50%,0)}
+
+.notesbtn{position:fixed;left:20px;bottom:20px;z-index:50;display:flex;align-items:center;gap:10px;background:var(--ink);color:#fff;padding:11px 18px 11px 14px;border-radius:999px;font-size:13px;transition:transform .2s}
+.notesbtn:hover{transform:translateY(-2px)}
+.notesbtn.on{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.notesbtn svg{width:22px;height:22px;overflow:visible}
+.notesbtn .wand{transform-origin:4px 20px;animation:wave 3.2s ease-in-out infinite}
+.notesbtn .sp{transform-box:fill-box;transform-origin:center;animation:twinkle 1.6s ease-in-out infinite}
+.notesbtn .sp2{animation-delay:.5s}.notesbtn .sp3{animation-delay:1s}
+.notesbtn.on .wand{animation:none;transform:rotate(-14deg)}
+@keyframes wave{0%,62%,100%{transform:rotate(0)}70%{transform:rotate(-18deg)}78%{transform:rotate(10deg)}86%{transform:rotate(-8deg)}94%{transform:rotate(3deg)}}
+@keyframes twinkle{0%,100%{transform:scale(.2);opacity:0}50%{transform:scale(1);opacity:1}}
+
+[data-note]{position:relative}
+body.notes [data-note]{outline:1px dashed #B5B5B5;outline-offset:6px}
+body.notes .drawer:not(.on) [data-note]{outline:none}
+.pinlayer{position:fixed;inset:0;pointer-events:none;z-index:85}
+.pin{display:none;position:absolute;top:0;left:0;pointer-events:auto;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font:500 11.5px/1 var(--sans);letter-spacing:0;text-transform:none;text-decoration:none;place-items:center;cursor:pointer;box-shadow:0 0 0 2px #fff;transition:transform .15s,background .15s}
+.pin::after{content:"";position:absolute;inset:-4px}
+body.notes .pin{display:grid}
+body.notes .pin[hidden]{display:none}
+.pin:hover,.pin:focus-visible{transform:scale(1.12);outline:none}
+.pin.on{background:var(--red)}
+body.notes .ann{padding-left:44px}
+body.notes .crumb{margin-top:14px}
+.notepop{position:fixed;z-index:97;width:min(340px,calc(100vw - 24px));background:var(--ink);color:#fff;padding:14px 18px 12px;box-shadow:0 18px 40px -12px rgba(0,0,0,.45);display:none;font-size:14px;line-height:1.55}
+.notepop.on{display:block;animation:popin .18s ease-out}
+.notepop .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:12px;color:#BDBDBD}
+.notepop .hd button{color:#fff;font-size:18px;width:32px;height:32px;margin-right:-8px}
+.notepop .ft{display:flex;justify-content:space-between;margin-top:12px;border-top:1px solid #3A3A3A;padding-top:6px}
+.notepop .ft button{color:#fff;font-size:12.5px;padding:10px 0;min-width:44px}
+.notepop .ft button:hover,.notepop .hd button:hover{opacity:.7}
+.notepop.sheet{left:0!important;right:0;bottom:0;top:auto!important;width:100%;padding:16px 20px calc(14px + env(safe-area-inset-bottom));font-size:15px}
+@keyframes popin{from{opacity:0;transform:translateY(6px)}}
+
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:900px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 12px}
+  .grid.big{grid-template-columns:1fr}
+  .bundle,.about,.pdp{grid-template-columns:1fr}
+  .pdp .vis{min-height:340px}
+  .opts{grid-template-columns:1fr 1fr}
+  .nav{grid-template-columns:1fr auto}.nav .l{display:none}
+}
+@media (max-width:600px){
+  .pad{padding-left:16px;padding-right:16px}
+  .nav .r .hide{display:none}
+  .two{grid-template-columns:1fr}
+  .co{padding:44px 20px}.pdp .det{padding:28px 18px}
+  footer{grid-template-columns:1fr}
+  .tools{margin-top:40px}
+}
+#lineup{padding:0!important;min-height:0!important;display:block!important;position:relative;aspect-ratio:1024/688;align-self:center}
+#lineup img.ph{position:absolute;inset:0}
+.bag[data-note]{position:absolute}
+</style>
+</head>
+<body>
+
+<div class="ann" id="ann"><b>For Denise Schmeißer:</b> instead of a CV, a shop where you can buy the designer you're looking for<button id="annX" aria-label="Close">×</button></div>
+
+<header>
+  <div class="nav pad">
+    <a href="#top" class="logo">ROMY</a>
+    <ul class="l"><li><a href="#shop" class="cur" aria-current="page">Shop</a></li><li><a href="#bundle">Bundle</a></li><li><a href="#quiz">Quiz</a></li><li><a href="#about">FAQ</a></li></ul>
+    <ul class="r">
+      <li class="hide"><button id="savedBtn">Saved <span id="savedCount" class="mute">0</span></button></li>
+      <li class="hide"><span>Milan <span class="mute">REMOTE</span></span></li>
+      <li><button id="openCart" class="nr" data-note="Cart count always visible in plain text. Microinteractions like this signal responsiveness and build trust.">Cart <span id="count">0</span></button></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top" class="pad">
+  <div class="crumb" data-note="Breadcrumb plus the current section underlined in the main menu. Baymard: 95% of sites don't highlight where shoppers are."><span>Home /</span> All skills</div>
+
+  <div class="intro">
+    <h1>All skills</h1>
+    <p>Here are the UX/UI skills your client's D2C shop needs right now: everything to analyse, redesign and optimise an established online store, then ship it with the team. All skills come from one designer, Romario Muça, and work on a freelance basis: take them as a one-time dose (a defined project) or a subscription (an ongoing monthly retainer).</p>
+    <div class="facts-row" data-note="Key facts above the fold, so a recruiter gets the essentials in seconds: people form a first impression of a site in about 50 milliseconds.">
+      <div><span>Designer</span>Romario Muça, UX/UI &amp; Product Designer</div>
+      <div><span>Experience</span>About 3 years with startups</div>
+      <div><span>Based in</span>Milan, remote or Hamburg</div>
+      <div><span>Availability</span>Available now</div>
+      <div><span>Education</span>MSc Digital &amp; Interaction Design, Politecnico di Milano</div>
+      <div><span>Languages</span>Italian, Albanian, English C1, Spanish B1</div>
+      <div><span>Contact</span><a href="mailto:romario.muca@gmail.com" style="text-decoration:underline;text-underline-offset:3px">romario.muca@gmail.com</a></div>
+    </div>
+    <div class="cats" id="cats" data-note="5 plain-language categories with product counts: fewer options mean faster decisions (Hick's Law), and counts set expectations before the click."></div>
+  </div>
+
+  <div class="tools" id="shop">
+    <button class="view" id="viewBtn">Change view <i><b></b><b></b><b></b><b></b></i></button>
+    <div class="rt" data-note="Live result count and sorting: shoppers always know how many products match their selection."><span class="mute" id="results">8 products</span><select id="sort" aria-label="Sort"><option value="pop">Sort: popular</option><option value="az">Sort: A–Z</option><option value="cat">Sort: category</option></select></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <section class="sec" id="bundle">
+    <div class="bundle">
+      <div>
+        <h2>Full shop redesign</h2>
+        <p class="lead">A complete routine built around your brief: modernise an established D2C shop, from the first audit to launch with the team.</p>
+        <ol>
+          <li><span class="mute">1</span><div>Analyse the existing shop<small>Find the UX gaps that cost sales</small></div></li>
+          <li><span class="mute">2</span><div>Rethink design and experience<small>A brand-true UI across every page</small></div></li>
+          <li><span class="mute">3</span><div>Optimise accounts, journey and conversion<small>Onboarding, product page, cart, checkout, subscriptions</small></div></li>
+          <li><span class="mute">4</span><div>Ship it with the team<small>Design system and close dev collaboration</small></div></li>
+        </ol>
+        <p class="pline"><s>8 separate chats</s><b>1 relaxed chat</b></p>
+        <button class="btn" id="addBundle" data-note="A 'frequently bought together' bundle with an anchored price: the struck-through total makes the set the easy choice.">Add the routine to cart</button>
+      </div>
+      <div class="lineup" id="lineup"></div>
+    </div>
+  </section>
+
+  <section class="sec quiz" id="quiz"><div id="quizBox" data-note="Product-finder quiz: two questions replace browsing all 8 products, a simple form of personalisation for undecided shoppers."></div></section>
+
+  <section class="sec" id="about">
+    <div class="faq">
+        <h2>Questions</h2>
+        <details open><summary>When can you start?</summary><p>Right away. I'm available now for freelance work, either a defined project or an ongoing retainer.</p></details>
+        <details><summary>How do you work?</summary><p>Freelance. I've worked freelance with startups for about three years. Pick a one-time dose for a defined project, or subscribe for an ongoing monthly retainer embedded with your client's team.</p></details>
+        <details><summary>Hamburg or remote?</summary><p>I'm based in Milan and used to working remotely. Happy to travel to Hamburg for kick-offs and workshops.</p></details>
+        <details><summary>Do you have e-commerce experience?</summary><p>Honestly: my recent work is product and SaaS: web apps at Devnut, health-data dashboards at Sensia, an AR coaching interface at HMDRIVE, an app redesign for Riding the Rainbow. Journeys, onboarding, account flows and conversion are the same muscles. This shop is the proof: turn on Designer notes (bottom left) to see the reasoning behind each pattern.</p></details>
+        <details><summary>Why a health shop?</summary><p>I've always wanted to work on a D2C health brand, so when I saw your post I built this shop specifically for it.</p></details>
+        <details><summary>Where do the designer notes come from?</summary><p>Turn on Designer notes (bottom left) and tap a numbered pin. The figures come from e-commerce UX research: Baymard Institute (checkout and product page studies), Google (Core Web Vitals), WCAG 2.2, and Apple Human Interface Guidelines, as summarised by DBB Software and GitNexa.</p></details>
+        <details><summary>How do I check out?</summary><p>Add anything to the cart and check out. No payment: the order comes to me and we set up a relaxed chat.</p></details>
+    </div>
+  </section>
+</main>
+
+<section id="pview" class="pad" hidden></section>
+
+<footer class="pad">
+  <div>ROMY · Romario Muça, UX/UI &amp; Product Designer</div>
+  <div class="links"><a href="mailto:romario.muca@gmail.com">romario.muca@gmail.com</a><a href="tel:+393475073092">+39 347 507 3092</a><a id="pfLink" target="_blank" rel="noopener">Portfolio ↗</a></div>
+</footer>
+
+<button class="notesbtn nu" id="notesBtn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <g class="wand"><path d="M4 20 L15 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M13.6 10.4 L15 9" stroke="#E8C66A" stroke-width="2.4" stroke-linecap="round"/></g>
+  <path class="sp" d="M18 2 l.9 2.1 2.1.9 -2.1.9 -.9 2.1 -.9-2.1 -2.1-.9 2.1-.9z" fill="#E8C66A"/>
+  <path class="sp sp2" d="M21.5 10 l.5 1.2 1.2.5 -1.2.5 -.5 1.2 -.5-1.2 -1.2-.5 1.2-.5z" fill="currentColor"/>
+  <path class="sp sp3" d="M10.5 3 l.5 1.2 1.2.5 -1.2.5 -.5 1.2 -.5-1.2 -1.2-.5 1.2-.5z" fill="currentColor"/>
+</svg><span id="notesLbl">Designer notes</span></button>
+<div class="overlay" id="overlay"></div>
+
+<aside class="drawer" id="cart" aria-label="Cart">
+  <div class="dh"><span>Cart</span><button class="x" data-close>Close</button></div>
+  <div class="ship" data-note="Progress bar toward a small reward: shows the basket's status at a glance and gives a reason to add one more item."><span id="shipTxt"></span><div class="bar2"><i id="shipBar"></i></div></div>
+  <div class="items" id="items"></div>
+  <div class="df">
+    <div class="tot"><span>Total</span><b id="total">—</b></div>
+    <button class="btn" id="toCheckout">Checkout</button>
+  </div>
+</aside>
+
+<div class="modal" id="modal"><div class="box" id="box"><button class="x" data-close>Close</button><div id="mcontent"></div></div></div>
+<div class="toast" id="toast"></div>
+<div class="notepop" id="notePop" role="dialog" aria-live="polite"><div class="hd"><span id="npNum"></span><button id="npX" aria-label="Close note">×</button></div><div id="npTxt"></div><div class="ft"><button id="npPrev">‹ Previous</button><button id="npNext">Next ›</button></div></div>
+
+<script>
+{
+const PORTFOLIO_URL = "https://romario-portfolio.lovable.app";
+const EMAIL = "romario.muca@gmail.com";
+const BAG = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 5h10l-.8 9H3.8z"/><path d="M5.5 5V4a2.5 2.5 0 0 1 5 0v1"/></svg>';
+const MARK = '<svg viewBox="0 0 13 16" fill="none" stroke="#1A1A1A" stroke-width="1.2"><path d="M1 1h11v14l-5.5-4L1 15z"/></svg>';
+
+/* packaging drawings */
+let gid=0;
+function pack(shape,c,label,big){
+  const g='g'+(gid++);
+  const rgb=[1,3,5].map(i=>parseInt(c.slice(i,i+2),16));
+  const L=(rgb[0]*299+rgb[1]*587+rgb[2]*114)/1000;
+  const lc=L>150?'#2A2A2A':'#FFFFFF';
+  const cap='#'+rgb.map(v=>Math.round(v*.72).toString(16).padStart(2,'0')).join('');
+  const defs=`<defs><linearGradient id="${g}" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".08"/><stop offset=".22" stop-color="#fff" stop-opacity=".25"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".1"/></linearGradient></defs>`;
+  const sh=`<ellipse cx="60" cy="236" rx="38" ry="4" fill="#000" opacity=".1"/>`;
+  const txt=(x,y,s,fill,anchor='middle')=>`<text x="${x}" y="${y}" font-family="Open Sauce Sans,sans-serif" font-size="${s}" fill="${fill}" text-anchor="${anchor}">`;
+  let body='';
+  if(shape==='dropper'){
+    body=`<rect x="47" y="48" width="26" height="14" fill="${cap}"/><rect x="44" y="18" width="32" height="34" rx="3" fill="${cap}"/><rect x="50" y="6" width="20" height="16" rx="8" fill="${cap}"/>
+      <rect x="30" y="62" width="60" height="172" rx="8" fill="${c}"/><rect x="30" y="62" width="60" height="172" rx="8" fill="url(#${g})"/>
+      ${txt(60,128,9,lc)}romario_</text>${txt(60,148,5.4,lc)}${label.toUpperCase()}</text>`;
+  } else if(shape==='tube'){
+    body=`<path d="M30 12 H90 L86 196 Q60 200 34 196 Z" fill="${c}"/><path d="M30 12 H90 L86 196 Q60 200 34 196 Z" fill="url(#${g})"/><rect x="29" y="8" width="62" height="7" fill="${c}"/>
+      <rect x="42" y="196" width="36" height="38" rx="2" fill="${cap}"/>
+      <g transform="translate(46 186) rotate(-90)">${txt(0,0,9,lc,'start')}romario_</text>${txt(0,10,5.4,lc,'start')}${label.toUpperCase()}</text></g>`;
+  } else if(shape==='sun'){
+    body=`<path d="M28 30 H92 L88 230 Q60 234 32 230 Z" fill="${c}"/><path d="M28 30 H92 L88 230 Q60 234 32 230 Z" fill="url(#${g})"/><rect x="34" y="16" width="52" height="16" rx="3" fill="${cap}"/>
+      ${txt(60,70,6,lc)}romario_</text>${txt(60,128,40,lc)}${big||''}</text>${txt(60,150,5.4,lc)}${label.toUpperCase()}</text>
+      <circle cx="48" cy="178" r="5" fill="none" stroke="${lc}" stroke-width=".8"/><circle cx="60" cy="178" r="5" fill="none" stroke="${lc}" stroke-width=".8"/><circle cx="72" cy="178" r="5" fill="none" stroke="${lc}" stroke-width=".8"/>`;
+  } else if(shape==='pump'){
+    body=`<rect x="48" y="4" width="34" height="9" rx="2" fill="${cap}"/><rect x="54" y="12" width="12" height="24" fill="${cap}"/><rect x="46" y="34" width="28" height="22" rx="3" fill="${cap}"/>
+      <path d="M24 82 Q24 56 50 56 H70 Q96 56 96 82 V226 Q96 234 88 234 H32 Q24 234 24 226 Z" fill="${c}"/><path d="M24 82 Q24 56 50 56 H70 Q96 56 96 82 V226 Q96 234 88 234 H32 Q24 234 24 226 Z" fill="url(#${g})"/>
+      ${txt(46,128,9,lc,'start')}romario_</text>${txt(34,146,5.4,lc,'start')}${label.toUpperCase()}</text><rect x="34" y="152" width="40" height="1" fill="${lc}" opacity=".5"/>`;
+  } else if(shape==='spray'){
+    body=`<rect x="44" y="6" width="30" height="26" rx="3" fill="${cap}"/><rect x="40" y="30" width="38" height="30" rx="2" fill="${cap}"/>
+      <rect x="32" y="60" width="56" height="174" rx="9" fill="${c}"/><rect x="32" y="60" width="56" height="174" rx="9" fill="url(#${g})"/>
+      <rect x="32" y="120" width="56" height="54" fill="#FFFFFF" opacity=".92"/>${txt(60,140,8.5,'#2A2A2A')}romario_</text>${txt(60,156,5.2,'#2A2A2A')}${label.toUpperCase()}</text>`;
+  }
+  return `<svg class="pk" viewBox="0 0 120 240" role="img" aria-label="${label}">${defs}${sh}${body}</svg>`;
+}
+
+const P=[
+ {id:'ux',name:'UX Audit Serum',short:'UX Audit',shape:'dropper',c:'#B8483A',cat:'Strategy',pop:1,tag:'Bestseller',
+  tl:'Finds the friction before your customers do.',
+  desc:"I go through the existing shop like a first-time customer, then like an analyst. Heuristic review, analytics, interviews and journey maps become a prioritised list of what's costing sales.",
+  ing:'Heuristic evaluation, user interviews, journey mapping, analytics review, usability testing',
+  proof:['HMDRIVE: UX research with drivers and driving instructors to define coaching needs','Riding the Rainbow: audited an existing app before redesigning it']},
+ {id:'ui',name:'UI Lotion SPF 30',short:'UI Design',shape:'sun',big:'UI',c:'#F5A623',cat:'Craft',pop:2,tag:'New',
+  tl:'Interfaces that look like the brand and work like a tool.',
+  desc:"Modern, clean interfaces for every page of the shop, from the homepage to the account area. Responsive by default, accessible by habit.",
+  ing:'Figma, responsive layouts, accessibility, micro-interactions, visual hierarchy',
+  proof:['Devnut: UI for custom software, web apps and SaaS for Italian SMEs','Sensia: playground and dashboard interfaces for physiological data']},
+ {id:'cro',name:'Conversion Body Lotion',short:'Conversion',shape:'pump',c:'#B9AFA5',cat:'Strategy',pop:3,
+  tl:'Fewer steps between "hmm" and "bought".',
+  desc:"Customer journey, account management and checkout flows designed to cut drop-off. Onboarding, subscriptions, re-orders: where a D2C shop wins or loses money.",
+  ing:'User flows, information architecture, onboarding, checkout UX, A/B test design',
+  proof:['DeepTree: information architecture and user flows for an AI M&A platform','Riding the Rainbow: redesigned flows and added new features to an existing app']},
+ {id:'type',name:'Type Theory Cream',short:'Type Theory',shape:'tube',c:'#D8D0E6',cat:'Craft',pop:4,demo:'type',tag:'Free sample',
+  tl:'Font pairings that read like a brand.',
+  desc:"Typography decides whether a health brand feels clinical, friendly or premium before anyone reads a word. Try the sample below.",
+  ing:'Type scales, font pairing, readability, hierarchy',
+  proof:['BSc Communication Design (110/110): typography is home turf','Brand identity work at Devnut and HMDRIVE']},
+ {id:'color',name:'Color Theory Mask',short:'Color Theory',shape:'tube',c:'#C5CBBE',cat:'Craft',pop:5,demo:'color',tag:'Free sample',
+  tl:'Palettes that sell, and pass contrast checks.',
+  desc:"Colour that carries the brand, guides attention to the call to action and stays readable for everyone. Pick a palette below and watch the contrast score.",
+  ing:'Brand palettes, WCAG contrast, semantic colours, light and dark themes',
+  proof:['HMDRIVE: brand identity, plus high-visibility colour in an AR interface used while driving','Caffè?: warm artisanal identity for a social coffee-break app']},
+ {id:'ds',name:'Design System Drops',short:'Design Systems',shape:'dropper',c:'#D9894A',cat:'Team',pop:6,
+  tl:'One source of truth for design and dev.',
+  desc:"Tokens, components and documentation, so the redesign stays consistent after launch and the team ships faster.",
+  ing:'Design tokens, component libraries, documentation, variants',
+  proof:['Devnut: reusable UI across many client projects in a 9-person dev team']},
+ {id:'proto',name:'Prototype Lotion SPF 50',short:'Prototyping',shape:'sun',big:'50',c:'#EFC3AE',cat:'Craft',pop:7,
+  tl:'Test it before you build it.',
+  desc:"Clickable prototypes, and coded ones built with AI tools, to validate ideas with real users before development. Like this shop.",
+  ing:'Figma prototypes, AI-assisted builds, rapid iteration, user testing',
+  proof:['HMDRIVE: designed and tested an in-glasses AR interface, iterating on real-time feedback','This shop: designed and shipped as a working prototype']},
+ {id:'team',name:'Dev Collab Spray',short:'Dev Collab',shape:'spray',c:'#EE8C86',cat:'Team',pop:8,tag:'Team favourite',
+  tl:'Designs that survive implementation.',
+  desc:"I work inside dev teams, not next to them: technical requirements in, interfaces out, and I stay through implementation.",
+  ing:'Dev handoff, agile rituals, technical empathy, clear specs',
+  proof:['Devnut: embedded in a 9-person development team','Sensia: worked with engineers and PoliMi researchers from concept to product']}
+];
+const byId=Object.fromEntries(P.map(p=>[p.id,p]));
+const PHOTO={ux:'ux',ui:'ui',cro:'cro',type:'type',color:'color',ds:'ds',proto:'proto',team:'collab'};
+const art=p=>PHOTO[p.id]?`<img class="ph" src="img/${PHOTO[p.id]}.jpg" alt="${p.name}, product photo" loading="lazy" decoding="async">`:pack(p.shape,p.c,p.short,p.big);
+const TYPE={once:'One-time dose · freelance project',sub:'Subscription · freelance retainer'};
+const PRICE='<s>2 calls</s><b>1 chat</b>';
+
+let cart=[],saved=new Set(),filter='All',sort='pop';
+const $=s=>document.querySelector(s);
+
+/* categories */
+const cats=['All','Strategy','Craft','Team','Saved'];
+function renderCats(){
+  const cnt=c=>c==='All'?P.length:c==='Saved'?saved.size:P.filter(p=>p.cat===c).length;
+  $('#cats').innerHTML=cats.map(c=>`<button class="${c===filter?'on':''}" data-c="${c}">${c==='All'?'View all':c}<sup>${cnt(c)}</sup></button>`).join('');
+  $('#cats').querySelectorAll('button').forEach(b=>b.onclick=()=>{filter=b.dataset.c;renderCats();renderGrid();});
+}
+function renderGrid(){
+  let list=P.filter(p=>filter==='All'||(filter==='Saved'?saved.has(p.id):p.cat===filter));
+  if(sort==='az') list=[...list].sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sort==='cat') list=[...list].sort((a,b)=>a.cat.localeCompare(b.cat));
+  else list=[...list].sort((a,b)=>a.pop-b.pop);
+  $('#results').textContent=list.length+(list.length===1?' product':' products');
+  $('#grid').innerHTML=list.length?list.map(p=>`
+    <div class="card" data-id="${p.id}" role="button" tabindex="0" aria-label="${p.name}">
+      <div class="tile">${p.tag?`<span class="badge">${p.tag}</span>`:''}<button class="bag" data-add="${p.id}" aria-label="Add ${p.name} to cart">${BAG}</button>${art(p)}</div>
+      <div class="meta"><div><h3>${p.name}</h3><div class="price">${PRICE}</div></div><button class="save ${saved.has(p.id)?'on':''}" data-save="${p.id}" aria-label="Save ${p.name}">${MARK}</button></div>
+    </div>`).join('') : `<div class="empty-grid">Nothing saved yet. Tap the bookmark under a product to save it.</div>`;
+  $('#grid').querySelectorAll('.card').forEach(c=>{
+    c.onclick=e=>{ if(e.target.closest('[data-add],[data-save]')) return; openPDP(c.dataset.id); };
+    c.onkeydown=e=>{ if(e.key==='Enter') openPDP(c.dataset.id); };
+  });
+  $('#grid').querySelectorAll('[data-add]').forEach(b=>b.onclick=e=>{e.stopPropagation();const id=b.dataset.add,k=cart.findIndex(i=>i.id===id);if(k>-1){cart.splice(k,1);updateCart();toast(byId[id].name+' removed from cart');}else add(id,'once');});
+  const fb=$('#grid [data-add]'); if(fb) fb.setAttribute('data-note',"Bag icon adds in one tap and turns black once the skill is in the cart, so you can see at a glance what you've added; tap again to remove. Touch area 44×44px (Apple HIG; WCAG 2.2 asks for at least 24×24).");
+  syncBags();
+  $('#grid').querySelectorAll('[data-save]').forEach(b=>b.onclick=e=>{e.stopPropagation();const id=b.dataset.save; saved.has(id)?saved.delete(id):saved.add(id); $('#savedCount').textContent=saved.size; toast(saved.has(id)?byId[id].name+' saved':'Removed from saved'); renderCats(); renderGrid();});
+}
+$('#sort').onchange=e=>{sort=e.target.value;renderGrid();};
+$('#viewBtn').onclick=()=>$('#grid').classList.toggle('big');
+$('#savedBtn').onclick=()=>{filter='Saved';renderCats();renderGrid();$('#shop').scrollIntoView();};
+$('#annX').onclick=e=>{e.stopPropagation();$('#ann').style.display='none';if(notesOn)refreshPins();};
+renderCats(); renderGrid();
+
+
+/* bundle */
+$('#lineup').innerHTML='<img class="ph" src="img/group.jpg" alt="All eight ROMY skills together: UX Audit, UI Lotion, Conversion, Typography, Color Theory, Design System, Prototype and Collaboration" loading="lazy" decoding="async">';
+$('#addBundle').onclick=()=>{P.forEach(p=>{const ex=cart.find(i=>i.id===p.id); if(ex) ex.type='sub'; else cart.push({id:p.id,type:'sub'});}); updateCart(); toast('Full shop redesign added'); openCart();};
+
+/* cart */
+function add(id,type){
+  const ex=cart.find(i=>i.id===id);
+  if(ex) ex.type=type; else cart.push({id,type});
+  updateCart(); toast(byId[id].name+' added to cart');
+}
+function syncBags(){document.querySelectorAll('[data-add]').forEach(b=>{const on=cart.some(i=>i.id===b.dataset.add);b.classList.toggle('in',on);b.setAttribute('aria-pressed',on);b.setAttribute('aria-label',(on?'Remove ':'Add ')+byId[b.dataset.add].name+(on?' from cart':' to cart'));});}
+function updateCart(){syncBags();
+  $('#count').textContent=cart.length;
+  const left=P.length-cart.length;
+  $('#shipTxt').textContent=left>0?`${left} more skill${left>1?'s':''} for the full routine and a free espresso in Milan`:'Full routine unlocked. The espresso is on me.';
+  $('#shipBar').style.width=(cart.length/P.length*100)+'%';
+  $('#items').innerHTML=cart.length?cart.map((i,k)=>{const p=byId[i.id];return `
+    <div class="item"><div class="th">${art(p)}</div><div><b>${p.name}</b><small>${TYPE[i.type]}</small></div><button class="rm" data-rm="${k}">Remove</button></div>`}).join('')
+    :`<div class="empty">Your cart is empty.</div>`;
+  $('#items').querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{cart.splice(+b.dataset.rm,1);updateCart();});
+  $('#total').textContent=cart.length?'1 relaxed chat':'—';
+  $('#toCheckout').disabled=!cart.length;
+}
+updateCart();
+
+/* overlays */
+function openCart(){$('#modal').classList.remove('on');$('#cart').classList.add('on');$('#overlay').classList.add('on');if(typeof refreshPins==='function')refreshPins();}
+function closeAll(){$('#cart').classList.remove('on');$('#modal').classList.remove('on');$('#overlay').classList.remove('on');if(typeof refreshPins==='function'){closeNote();refreshPins();}}
+function openModal(html){$('#cart').classList.remove('on');$('#mcontent').innerHTML=html;$('#box').scrollTop=0;$('#modal').classList.add('on');$('#overlay').classList.add('on');if(typeof refreshPins==='function')refreshPins();}
+$('#openCart').onclick=openCart;
+$('#overlay').onclick=closeAll;
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeAll);
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal') closeAll();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(typeof activePin!=='undefined'&&activePin){closeNote();return;} closeAll();}});
+
+/* product page */
+function backLabel(p,big){
+  return `<div class="back ${big?'big':''}" style="--c:${p.c}"><div class="lab"><div class="lh"><b>ROMY</b><span>${p.cat}</span></div><h4>${p.name}</h4><p class="lt">${p.tl}</p><div class="lr"><span>Ingredients</span>${p.ing}</div><div class="lr"><span>Directions</span>Start with one relaxed chat. Freelance, remote from Milan.</div><div class="lr"><span>Tested in</span>${p.proof.length} real project${p.proof.length>1?'s':''}</div></div></div>`;
+}
+const ICON={
+  clock:'<svg viewBox="0 0 16 16" fill="none" stroke="#1A1A1A" stroke-width="1.1"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.6V8l2.3 1.5"/></svg>',
+  loop:'<svg viewBox="0 0 16 16" fill="none" stroke="#1A1A1A" stroke-width="1.1"><path d="M3 6.5A5 5 0 0 1 12.6 5M13 9.5A5 5 0 0 1 3.4 11"/><path d="M12.8 2.6V5.3H10M3.2 13.4V10.7H6"/></svg>',
+  help:'<svg viewBox="0 0 16 16" fill="none" stroke="#1A1A1A" stroke-width="1.1"><circle cx="8" cy="8" r="6.2"/><path d="M6.3 6.3a1.8 1.8 0 1 1 2.5 1.6c-.5.3-.8.6-.8 1.3"/><circle cx="8" cy="11.3" r=".4" fill="#1A1A1A"/></svg>',
+  arrow:'<svg viewBox="0 0 16 16" fill="none" stroke="#1A1A1A" stroke-width="1.1"><path d="M6 3.5 10.5 8 6 12.5"/></svg>'};
+let pv={id:null,type:'once',extras:new Set()};
+let shopScroll=0;
+function openPDP(id){ shopScroll=scrollY; location.hash='p-'+id; }
+function renderProduct(id){
+  const p=byId[id], inCart=cart.find(i=>i.id===id);
+  pv={id,type:inCart?inCart.type:'once',extras:new Set()};
+  const others=P.filter(o=>o.id!==id);
+  const related=[...others.filter(o=>o.cat===p.cat),...others.filter(o=>o.cat!==p.cat)].slice(0,3);
+  $('#pview').innerHTML=`
+  <div class="crumb"><a href="#shop">Home</a> <span>/</span> <a href="#shop">Skills</a> <span>/</span> ${p.name}</div>
+  <div class="pv">
+    <div class="galwrap" data-note="Swipeable gallery with front and back of the pack: product pages are advised to offer several images.">
+      <div class="gal" id="gal" tabindex="0" aria-label="Product images">
+        <div class="shot">${p.tag?`<span class="badge">${p.tag}</span>`:''}${art(p)}</div>
+        <div class="shot">${backLabel(p,true)}</div>
+      </div>
+      <div class="galnav"><div class="dots" id="galDots"><button class="on" aria-label="Front of pack"><i></i></button><button aria-label="Back of pack"><i></i></button></div>
+        <span class="mute" id="galCount">1 / 2 · Front</span>
+        <div class="arrows"><button id="galPrev" aria-label="Previous image">‹</button><button id="galNext" aria-label="Next image">›</button></div></div>
+    </div>
+    <div class="pvi">
+      <div class="top"><div><h1>${p.name}</h1><div class="price" data-note="Full price shown up front. Extra costs are the #1 reason for checkout abandonment (40%, Baymard).">${PRICE}</div></div>
+        <button class="save ${saved.has(id)?'on':''}" id="pvSave" aria-label="Save ${p.name}">${MARK}</button></div>
+      <p class="lede" data-note="Product page structure: benefit summary, then details, then proof. Baymard (2026): only 48% of leading desktop sites have decent product page UX.">${p.tl} ${p.desc} Designed by <u>Romario Muça</u> for your client's shop.</p>
+      <div class="lbl"><span>Select format</span><span class="mute">Freelance only</span></div>
+      <div class="fmt" id="pvFmt" data-note="Subscribe vs one-time, the core D2C purchase choice: here a defined freelance project or an ongoing freelance retainer.">
+        <button data-t="once" class="${pv.type==='once'?'on':''}">One-time dose<small>Defined project</small></button>
+        <button data-t="sub" class="${pv.type==='sub'?'on':''}">Subscription<small>Monthly retainer · best value</small></button>
+      </div>
+      <div class="lbl"><span>Add a matching skill</span><span class="mute">optional</span></div>
+      <div class="xs" id="pvXs" data-note="Cross-sell at the moment of decision, like 'add a matching frame': a 'frequently bought together' module right above the buy button.">
+        <button class="on" data-x=""><div class="th none"></div>No extra<br>No cost</button>
+        ${others.map(o=>`<button data-x="${o.id}"><div class="th">${art(o)}</div>${o.short}<br><s>2 calls</s> 1 chat</button>`).join('')}
+      </div>
+      <div class="xbar"><i id="pvBar"></i></div>
+      <button class="btn wide" id="pvAdd">${inCart?'Update cart':'Add to cart'} · 1 chat</button>
+      <div class="payrow"><span>Free espresso in Milan with the full routine</span><span class="mute">Remote · Milan → Hamburg</span></div>
+      <div class="svc" data-note="Availability, way of working and help shown before you scroll: product pages should display trust signals like delivery timelines and policies.">
+        <div class="r">${ICON.clock}<span>Availability: starts right away</span><span></span></div>
+        <div class="r">${ICON.loop}<span>Way of working: freelance project or monthly retainer</span><span></span></div>
+        <a href="#about">${ICON.help}<span>Need assistance?<small>Read the FAQ or write to ${EMAIL}</small></span>${ICON.arrow}</a>
+      </div>
+      <div class="acc">
+        ${p.demo?`<details open><summary>Try a free sample</summary><div class="inner">${p.demo==='color'?colorDemo():typeDemo()}</div></details>`:''}
+        <details><summary>Product details</summary><div class="inner"><p><span class="mute">Ingredients:</span> ${p.ing}</p></div></details>
+        <details><summary>Tested in</summary><div class="inner proof" data-note="Trust signals next to the buy button: real projects, not invented reviews. Baymard: 19% of shoppers abandon checkout because they don't trust the site with their card details."><ul>${p.proof.map(x=>`<li>${x}</li>`).join('')}</ul></div></details>
+        <details><summary>About the designer</summary><div class="inner">Romario Muça, UX/UI &amp; Product Designer. About 3 years freelancing with startups, MSc Digital &amp; Interaction Design at Politecnico di Milano. Based in Milan, available now.</div></details>
+      </div>
+      <div class="rel"><h2>Related skills</h2><div class="grid">${related.map(o=>`
+        <div class="card" data-id="${o.id}" role="button" tabindex="0" aria-label="${o.name}">
+          <div class="tile">${o.tag?`<span class="badge">${o.tag}</span>`:''}${art(o)}</div>
+          <div class="meta"><div><h3>${o.name}</h3><div class="price">${PRICE}</div></div></div>
+        </div>`).join('')}</div></div>
+    </div>
+  </div>`;
+  const root=$('#pview');
+  root.querySelectorAll('#pvFmt button').forEach(b=>b.onclick=()=>{pv.type=b.dataset.t;root.querySelectorAll('#pvFmt button').forEach(x=>x.classList.toggle('on',x===b));});
+  const xs=$('#pvXs');
+  xs.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    const x=b.dataset.x;
+    if(!x){pv.extras.clear();}
+    else{pv.extras.has(x)?pv.extras.delete(x):pv.extras.add(x);}
+    xs.querySelectorAll('button').forEach(o=>o.classList.toggle('on',o.dataset.x?pv.extras.has(o.dataset.x):pv.extras.size===0));
+  });
+  const bar=()=>{const m=xs.scrollWidth-xs.clientWidth;$('#pvBar').style.width=(m>0?30+70*xs.scrollLeft/m:100)+'%';};
+  xs.addEventListener('scroll',bar,{passive:true}); bar();
+  $('#pvAdd').onclick=()=>{
+    add(id,pv.type);
+    pv.extras.forEach(x=>{const ex=cart.find(i=>i.id===x); if(ex) ex.type=pv.type; else cart.push({id:x,type:pv.type});});
+    if(pv.extras.size){updateCart();toast(`${p.name} + ${pv.extras.size} matching skill${pv.extras.size>1?'s':''} added`);}
+    openCart();
+  };
+  $('#pvSave').onclick=()=>{saved.has(id)?saved.delete(id):saved.add(id);$('#pvSave').classList.toggle('on',saved.has(id));$('#savedCount').textContent=saved.size;renderCats();toast(saved.has(id)?p.name+' saved':'Removed from saved');};
+  root.querySelectorAll('.rel .card').forEach(c=>{c.onclick=()=>{location.hash='p-'+c.dataset.id;};c.onkeydown=e=>{if(e.key==='Enter')location.hash='p-'+c.dataset.id;};});
+  const gal=$('#gal'), dots=[...$('#galDots').children];
+  const go=i=>gal.scrollTo({left:i*gal.clientWidth});
+  const cur=()=>Math.round(gal.scrollLeft/Math.max(1,gal.clientWidth));
+  gal.addEventListener('scroll',()=>{const i=cur();dots.forEach((d,k)=>d.classList.toggle('on',k===i));$('#galCount').textContent=`${i+1} / 2 · ${i?'Back':'Front'}`;},{passive:true});
+  dots.forEach((d,k)=>d.onclick=()=>go(k));
+  $('#galPrev').onclick=()=>go(Math.max(0,cur()-1)); $('#galNext').onclick=()=>go(Math.min(1,cur()+1));
+  gal.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();go(Math.min(1,cur()+1));} if(e.key==='ArrowLeft'){e.preventDefault();go(Math.max(0,cur()-1));}});
+  if(p.demo==='color') initColor();
+  if(p.demo==='type') initType();
+}
+function route(){
+  const h=location.hash.slice(1);
+  const m=/^p-([a-z]+)$/.exec(h);
+  if(m&&byId[m[1]]){
+    closeAll();
+    $('#top').hidden=true; $('#pview').hidden=false;
+    renderProduct(m[1]); scrollTo(0,0);
+  } else {
+    const wasProduct=!$('#pview').hidden;
+    $('#pview').hidden=true; $('#top').hidden=false;
+    if(h&&document.getElementById(h)) document.getElementById(h).scrollIntoView();
+    else if(wasProduct) scrollTo(0,shopScroll);
+  }
+  if(typeof refreshPins==='function') refreshPins();
+}
+addEventListener('hashchange',route);
+
+/* colour sample */
+const PALS=[
+  {n:'Clinical',bg:'#EAF2F8',fg:'#123247',btn:'#1C6EA4',bt:'#FFFFFF'},
+  {n:'Botanical',bg:'#E7EFE3',fg:'#1E2B24',btn:'#2F5D46',bt:'#FFFFFF'},
+  {n:'Warm',bg:'#FBE9DF',fg:'#3B1E12',btn:'#C2410C',bt:'#FFFFFF'},
+  {n:'Pastel trap',bg:'#FDF6E7',fg:'#B9B2A3',btn:'#F7D774',bt:'#FFFFFF'},
+  {n:'Premium',bg:'#1E1E22',fg:'#F2EEE6',btn:'#D9B26F',bt:'#1E1E22'}];
+function colorDemo(){return `<div class="demo" data-note="Body text needs 4.5:1 contrast (WCAG AA), and the European Accessibility Act applies to e-commerce since 28 June 2025."><span>Free sample · pick a palette</span><div class="pal" id="pal"></div><div class="mock" id="mock"><div><b>Daily Magnesium</b><span>Better sleep, 60 capsules</span></div><button class="mbtn" id="mbtn">Add to cart</button></div><div class="cr" id="cr"></div></div>`;}
+function lum(h){const c=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255).map(v=>v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4));return .2126*c[0]+.7152*c[1]+.0722*c[2];}
+function ratio(a,b){const [x,y]=[lum(a),lum(b)].sort((m,n)=>n-m);return (x+.05)/(y+.05);}
+function initColor(){
+  const pal=$('#pal');
+  pal.innerHTML=PALS.map((p,i)=>`<button title="${p.n}" aria-label="${p.n}" style="background:linear-gradient(135deg,${p.bg} 50%,${p.btn} 50%)" data-i="${i}"></button>`).join('');
+  const set=i=>{const p=PALS[i];
+    pal.querySelectorAll('button').forEach((b,k)=>b.classList.toggle('on',k===i));
+    Object.assign($('#mock').style,{background:p.bg,color:p.fg});
+    Object.assign($('#mbtn').style,{background:p.btn,color:p.bt});
+    const t=ratio(p.fg,p.bg),b=ratio(p.bt,p.btn);
+    const f=v=>v>=4.5?`<span class="ok">${v.toFixed(1)}:1 passes AA</span>`:`<span class="ko">${v.toFixed(1)}:1 fails</span>`;
+    $('#cr').innerHTML=`${p.n}: text ${f(t)} · button ${f(b)}${(t<4.5||b<4.5)?'<br>Looks soft, sells less: low contrast hides the call to action.':''}`;};
+  pal.querySelectorAll('button').forEach(b=>b.onclick=()=>set(+b.dataset.i));
+  set(1);
+}
+
+/* type sample */
+const PAIRS=[
+  {n:'Friendly',h:"'Fraunces',serif",hw:600,b:"'Manrope',sans-serif",why:'Soft serif with a humanist sans: warm, trustworthy wellness.'},
+  {n:'Clinical',h:"'Open Sauce Sans',sans-serif",hw:500,b:"'Open Sauce Sans',sans-serif",why:'One sans family: precise and medical, good for science-backed claims.'},
+  {n:'Premium',h:"'DM Serif Display',serif",hw:400,b:"'Manrope',sans-serif",why:'High-contrast display serif: luxury skincare, higher price perception.'},
+  {n:'Bold',h:"'Syne',sans-serif",hw:700,b:"'Space Mono',monospace",why:'Expressive grotesk with mono: young, disruptive D2C energy.'},
+  {n:'Editorial',h:"'Playfair Display',serif",hw:700,b:"Georgia,serif",why:'Two serifs: magazine feel, beautiful but tiring on long product pages.'}];
+function typeDemo(){return `<div class="demo"><span>Free sample · switch the pairing</span><div class="tp" id="tp"></div><div class="tmock"><div class="h" id="th">Sleep better, naturally.</div><div class="b" id="tb">Magnesium bisglycinate with lemon balm. Gentle on the stomach, 60 vegan capsules.</div><div class="why" id="tw"></div></div></div>`;}
+function initType(){
+  const tp=$('#tp');
+  tp.innerHTML=PAIRS.map((p,i)=>`<button data-i="${i}">${p.n}</button>`).join('');
+  const set=i=>{const p=PAIRS[i];
+    tp.querySelectorAll('button').forEach((b,k)=>b.classList.toggle('on',k===i));
+    Object.assign($('#th').style,{fontFamily:p.h,fontWeight:p.hw});
+    $('#tb').style.fontFamily=p.b;$('#tw').textContent=p.why;};
+  tp.querySelectorAll('button').forEach(b=>b.onclick=()=>set(+b.dataset.i));
+  set(0);
+}
+
+/* quiz */
+const Q=[
+  {q:"What does your client's shop need most?",o:[
+    ['A fresh look','Feels dated next to competitors',['ui','color','type']],
+    ['More sales','Traffic is fine, conversion is not',['ux','cro']],
+    ['Order in the chaos','Inconsistent pages, slow shipping',['ds','team','proto']],
+    ['Honestly, everything','A full redesign from scratch',P.map(p=>p.id)]]},
+  {q:'How would you like to work together?',o:[
+    ['A defined project','Clear scope, clear end','once'],
+    ['Ongoing support','A monthly freelance retainer','sub'],
+    ['Not sure yet',"Let's talk about it",'once'],
+    ['Whatever works','Open to both','sub']]}];
+let qs={step:0,picks:[],type:'once'};
+function renderQuiz(){
+  const box=$('#quizBox');
+  if(qs.step<Q.length){
+    const q=Q[qs.step];
+    box.innerHTML=`<h2>Skill finder <span class="mute">${qs.step+1} / ${Q.length}</span></h2><p class="q">${q.q}</p>
+      <div class="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}"><b>${o[0]}</b><small>${o[1]}</small></button>`).join('')}</div>`;
+    box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const o=q.o[+b.dataset.i]; if(qs.step===0) qs.picks=o[2]; else qs.type=o[2]; qs.step++; renderQuiz();});
+  } else {
+    box.innerHTML=`<h2>Skill finder <span class="mute">done</span></h2><p class="q">Here's what your client needs, as a ${qs.type==='sub'?'freelance retainer':'freelance project'}.</p>
+      <div class="recs">${qs.picks.map(id=>`<span>${byId[id].name}</span>`).join('<span class="mute">·</span>')}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="qAdd">Add routine to cart</button><button class="btn ghost" id="qRe">Retake</button></div>`;
+    $('#qAdd').onclick=()=>{qs.picks.forEach(id=>{const ex=cart.find(i=>i.id===id); if(ex) ex.type=qs.type; else cart.push({id,type:qs.type});}); updateCart(); openCart();};
+    $('#qRe').onclick=()=>{qs={step:0,picks:[],type:'once'};renderQuiz();};
+  }
+}
+renderQuiz();
+
+/* checkout */
+$('#toCheckout').onclick=()=>{
+  if(!cart.length) return;
+  const s=cart.some(i=>i.type==='sub'),o=cart.some(i=>i.type==='once');
+  const pref=s&&o?'both':s?'sub':'once';
+  openModal(`<div class="co">
+    <h3>Checkout</h3>
+    <p class="sub">No payment needed. Tell me where to deliver the designer.</p>
+    <form id="coForm">
+      <div class="two">
+        <div class="field"><label for="f1">Name</label><input id="f1" value="Denise Schmeißer" required></div>
+        <div class="field"><label for="f2">Company</label><input id="f2" value="DS Scale"></div>
+      </div>
+      <div class="field"><label for="f3">Delivery format</label><select id="f3"><option value="once" ${pref==='once'?'selected':''}>Freelance project</option><option value="sub" ${pref==='sub'?'selected':''}>Freelance retainer</option><option value="both" ${pref==='both'?'selected':''}>Open to both</option></select></div>
+      <div class="field"><label for="f4">Delivery address</label><select id="f4"><option>Remote</option><option>Hamburg</option><option>Remote with visits to Hamburg</option></select></div>
+      <div class="field"><label for="f5">Note (optional)</label><textarea id="f5" rows="2" placeholder="Free for a call on Thursday?"></textarea></div>
+      <div class="summary">${cart.map(i=>`<div><span>${byId[i.id].name}</span><span class="mute">${i.type==='sub'?'Subscription':'One-time'}</span></div>`).join('')}<div class="t"><span>Total</span><span>1 relaxed chat</span></div></div>
+      <button class="btn" type="submit" data-note="Guest checkout, few pre-filled fields, total shown before ordering. Baymard: forced account creation causes 18% of checkout abandonment, a hidden total 12%.">Place order</button>
+    </form></div>`);
+  $('#coForm').onsubmit=e=>{e.preventDefault();placeOrder();};
+};
+
+function placeOrder(){
+  const name=$('#f1').value.trim()||'Denise',comp=$('#f2').value.trim(),sel=$('#f3'),where=$('#f4').value,note=$('#f5').value.trim();
+  const fmt=sel.options[sel.selectedIndex].text;
+  const num='RM-'+Math.floor(1000+Math.random()*9000);
+  const lines=cart.map(i=>`- ${byId[i.id].name} (${i.type==='sub'?'subscription / freelance retainer':'one-time / freelance project'})`).join('\n');
+  const body=`Hi Romario,\n\nI just placed order ${num} on your shop:\n\n${lines}\n\nDelivery format: ${fmt}\nLocation: ${where}${note?`\nNote: ${note}`:''}\n\nLet's have a relaxed chat.\n\n${name}${comp?`, ${comp}`:''}`;
+  const mail=`mailto:${EMAIL}?subject=${encodeURIComponent(`Order ${num}: UI/UX Designer for the D2C health brand`)}&body=${encodeURIComponent(body)}`;
+  const first=name.split(' ')[0].replace(/[<>&"']/g,'');
+  $('#mcontent').innerHTML=`<div class="co done">
+    <div class="pks">${cart.slice(0,5).map((i,k)=>`<div style="animation-delay:${k*.07}s">${art(byId[i.id])}</div>`).join('')}</div>
+    <p class="mute">Order ${num} · confirmed</p>
+    <h3>Thank you, ${first}</h3>
+    <p class="sub">Your designer is packed and ready to ship. Last step: send the order to my inbox and we'll book that relaxed chat.</p>
+    <div class="acts">
+      <a class="btn" href="${mail}">Send the order to Romario</a>
+      <button class="btn ghost" id="copyOrder">Copy order text</button>
+      <a class="btn ghost" href="${PORTFOLIO_URL}" target="_blank" rel="noopener">View full portfolio</a>
+    </div>
+    <p class="sub" style="margin-top:16px">Email doesn't open? Write to ${EMAIL} or call +39 347 507 3092.</p></div>`;
+  $('#copyOrder').onclick=async()=>{try{await navigator.clipboard.writeText(body);toast('Order copied');}catch(e){toast('Copy blocked: write to '+EMAIL);}};
+  $('#box').scrollTop=0;
+}
+
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),1800);}
+let notesOn=false,activePin=null,muting=false,pending=false;
+const pop=$('#notePop');
+const layer=document.createElement('div'); layer.className='pinlayer'; document.body.appendChild(layer);
+const pinFor=new Map();
+function noteVisible(el){
+  const modalOpen=$('#modal').classList.contains('on'), cartOpen=$('#cart').classList.contains('on');
+  if(modalOpen) return !!el.closest('#modal');
+  if(cartOpen) return !!el.closest('#cart');
+  if(el.closest('.drawer')||el.closest('.modal')) return false;
+  return el.getClientRects().length>0;
+}
+function refreshPins(){
+  if(!notesOn) return;
+  muting=true; let n=0;
+  const els=[...document.querySelectorAll('[data-note]')];
+  for(const [el,pin] of pinFor){ if(!el.isConnected||!els.includes(el)){pin.remove();pinFor.delete(el);} }
+  els.forEach(el=>{
+    let pin=pinFor.get(el);
+    if(!pin){
+      pin=document.createElement('span'); pin.className='pin'; pin.setAttribute('role','button'); pin.tabIndex=0; pin._el=el;
+      pin.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openNote(pin);});
+      pin.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();openNote(pin);}});
+      layer.appendChild(pin); pinFor.set(el,pin);
+    }
+    if(noteVisible(el)){n++;pin.textContent=n;pin.dataset.n=n;pin.dataset.ok='1';pin.setAttribute('aria-label','Designer note '+n);}
+    else {pin.dataset.ok='';pin.hidden=true;}
+  });
+  if(activePin&&(!activePin.isConnected||!activePin.dataset.ok)) closeNote();
+  placePins();
+  mo.takeRecords(); muting=false;
+}
+function placePins(){
+  const hb=document.querySelector('header').getBoundingClientRect().bottom;
+  const overlay=$('#modal').classList.contains('on')||$('#cart').classList.contains('on');
+  for(const [el,pin] of pinFor){
+    if(!pin.dataset.ok){pin.hidden=true;continue;}
+    const r=el.getBoundingClientRect();
+    const inHeader=!!el.closest('header')||!!el.closest('#ann');
+    const small=r.width<60;
+    const top=small?r.top-30:r.top-14, left=small?r.left+r.width/2-12:r.left-14;
+    const off=r.bottom<0||r.top>innerHeight||r.right<0||r.left>innerWidth||(!overlay&&!inHeader&&r.top-6<hb);
+    pin.hidden=off;
+    if(!off){pin.style.transform=`translate(${Math.max(4,Math.min(innerWidth-28,left))}px,${Math.max(4,top)}px)`;}
+  }
+  if(activePin&&activePin.hidden) closeNote(); else placeNote();
+}
+function tick(){ if(!notesOn) return; placePins(); requestAnimationFrame(tick); }
+const mo=new MutationObserver(()=>{if(muting||!notesOn||pending) return; pending=true; requestAnimationFrame(()=>{pending=false;refreshPins();});});
+mo.observe(document.body,{childList:true,subtree:true});
+function pins(){return [...layer.querySelectorAll('.pin')].filter(p=>p.dataset.ok).sort((a,b)=>a.dataset.n-b.dataset.n);}
+function openNote(pin){
+  activePin=pin;
+  document.querySelectorAll('.pin.on').forEach(p=>p.classList.remove('on'));
+  pin.classList.add('on');
+  $('#npNum').textContent=`Note ${pin.dataset.n} of ${pins().length}`;
+  $('#npTxt').textContent=pin._el.dataset.note;
+  pop.classList.add('on'); $('#toast').classList.remove('on'); placeNote();
+}
+function placeNote(){
+  if(!activePin) return;
+  if(innerWidth<=600){pop.classList.add('sheet');return;}
+  pop.classList.remove('sheet');
+  const r=activePin.getBoundingClientRect(),w=pop.offsetWidth,h=pop.offsetHeight;
+  let x=r.left,y=r.bottom+10;
+  if(y+h>innerHeight-12) y=r.top-h-10;
+  pop.style.left=Math.min(Math.max(12,x),innerWidth-w-12)+'px';
+  pop.style.top=Math.max(12,y)+'px';
+}
+function closeNote(){activePin=null;pop.classList.remove('on');document.querySelectorAll('.pin.on').forEach(p=>p.classList.remove('on'));}
+function stepNote(d){
+  const list=pins(); if(!list.length) return;
+  const i=activePin?list.indexOf(activePin):-1;
+  const next=list[(i+d+list.length)%list.length];
+  const r=next.getBoundingClientRect();
+  const er=next._el.getBoundingClientRect(); if(er.top<90||er.top>innerHeight-80){next._el.scrollIntoView({block:'center',behavior:'instant'}); placePins();}
+  openNote(next);
+}
+$('#npX').onclick=closeNote; $('#npPrev').onclick=()=>stepNote(-1); $('#npNext').onclick=()=>stepNote(1);
+pop.addEventListener('click',e=>e.stopPropagation());
+document.addEventListener('click',()=>{if(activePin) closeNote();});
+addEventListener('scroll',placeNote,{passive:true}); addEventListener('resize',placeNote);
+$('#box').addEventListener('scroll',placeNote,{passive:true}); $('#items').addEventListener('scroll',placeNote,{passive:true});
+$('#notesBtn').onclick=e=>{
+  e.stopPropagation();
+  notesOn=document.body.classList.toggle('notes');
+  const nb=$('#notesBtn'); nb.classList.toggle('on',notesOn); nb.setAttribute('aria-pressed',notesOn);
+  $('#notesLbl').textContent=notesOn?'Hide designer notes':'Designer notes';
+  if(notesOn){refreshPins(); tick(); toast('Tap a numbered pin to read the note');} else {closeNote(); for(const p of pinFor.values()) p.hidden=true;}
+};
+$('#pfLink').href=PORTFOLIO_URL;
+route();
+}
+</script>
+</body>
+</html>
