@@ -202,7 +202,12 @@ img.ph{display:block;width:100%;height:100%;object-fit:cover}
 .opt small{align-self:end}
 .opt b{font-weight:400;font-size:14px}
 .opt small{color:var(--mute);font-size:12.5px}
-.recs{display:flex;flex-wrap:wrap;gap:6px 18px;margin:6px 0 18px;font-size:14px}
+.recs{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 22px}
+.rec{display:grid;grid-template-columns:48px auto 32px;align-items:center;gap:10px;background:#FBF8F3;padding:6px 6px 6px 6px;font-size:13px;animation:rise .3s ease backwards}
+.rec .th{width:48px;aspect-ratio:4/5;overflow:hidden;background:var(--tile)}
+.rec .rm{width:32px;height:32px;display:grid;place-items:center;font-size:17px;color:var(--mute);border-radius:50%}
+.rec .rm:hover{background:var(--ink);color:#fff}
+.recs .none{color:var(--mute);font-size:13.5px;padding:8px 0}
 
 .about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px}
 .facts{margin-top:18px}
@@ -794,11 +799,12 @@ function renderQuiz(){
     const q=Q[qs.step];
     box.innerHTML=`<h2>Skill finder <span class="mute">${qs.step+1} / ${Q.length}</span></h2><p class="q">${q.q}</p>
       <div class="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}"><span class="key" aria-hidden="true">${"ABCD"[i]}</span><b>${o[0]}</b><small>${o[1]}</small></button>`).join('')}</div>`;
-    box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const o=q.o[+b.dataset.i]; if(qs.step===0) qs.picks=o[2]; else qs.type=o[2]; qs.step++; renderQuiz();});
+    box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const o=q.o[+b.dataset.i]; if(qs.step===0) qs.picks=[...o[2]]; else qs.type=o[2]; qs.step++; renderQuiz();});
   } else {
     box.innerHTML=`<h2>Skill finder <span class="mute">done</span></h2><p class="q">Here's what your client needs, as a ${qs.type==='sub'?'freelance retainer':'freelance project'}.</p>
-      <div class="recs">${qs.picks.map(id=>`<span>${byId[id].name}</span>`).join('<span class="mute">·</span>')}</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="qAdd">Add routine to cart</button><button class="btn ghost" id="qRe">Retake</button></div>`;
+      <div class="recs" id="qRecs">${qs.picks.length?qs.picks.map(id=>`<div class="rec"><div class="th">${art(byId[id])}</div><span>${byId[id].name}</span><button class="rm" data-qx="${id}" aria-label="Remove ${byId[id].name}">×</button></div>`).join(''):'<p class="none">No skills left in your routine. Retake the quiz or add skills from the shop.</p>'}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="qAdd" ${qs.picks.length?'':'disabled'}>Add ${qs.picks.length} skill${qs.picks.length===1?'':'s'} to cart</button><button class="btn ghost" id="qRe">Retake</button></div>`;
+    box.querySelectorAll('[data-qx]').forEach(b=>b.onclick=()=>{qs.picks=qs.picks.filter(x=>x!==b.dataset.qx);renderQuiz();});
     $('#qAdd').onclick=()=>{qs.picks.forEach(id=>{const ex=cart.find(i=>i.id===id); if(ex) ex.type=qs.type; else cart.push({id,type:qs.type});}); updateCart(); openCart();};
     $('#qRe').onclick=()=>{qs={step:0,picks:[],type:'once'};renderQuiz();};
   }
