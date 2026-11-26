@@ -194,8 +194,12 @@ img.ph{display:block;width:100%;height:100%;object-fit:cover}
 
 .quiz .q{font-size:22px;font-weight:400;letter-spacing:-.01em;margin:18px 0 22px;line-height:1.25;max-width:640px}
 .opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-.opt{background:var(--tile);padding:20px 18px;text-align:left;min-height:120px;display:flex;flex-direction:column;justify-content:space-between;transition:background .2s}
-.opt:hover{background:#E6E3DF}
+.quiz #quizBox{background:#EAE3D9;padding:clamp(24px,4vw,48px)}
+.opt{background:#FBF8F3;padding:18px;text-align:left;min-height:120px;display:grid;grid-template-columns:32px 1fr;grid-template-rows:auto 1fr;column-gap:12px;row-gap:16px;align-items:start;border:1px solid transparent;transition:border-color .2s,transform .2s}
+.opt:hover{border-color:var(--ink);transform:translateY(-2px)}
+.opt .key{grid-row:1/3;width:32px;height:32px;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;font-size:12.5px;font-weight:500;transition:background .2s,color .2s}
+.opt:hover .key{background:var(--ink);color:#fff}
+.opt small{align-self:end}
 .opt b{font-weight:400;font-size:14px}
 .opt small{color:var(--mute);font-size:12.5px}
 .recs{display:flex;flex-wrap:wrap;gap:6px 18px;margin:6px 0 18px;font-size:14px}
@@ -789,7 +793,7 @@ function renderQuiz(){
   if(qs.step<Q.length){
     const q=Q[qs.step];
     box.innerHTML=`<h2>Skill finder <span class="mute">${qs.step+1} / ${Q.length}</span></h2><p class="q">${q.q}</p>
-      <div class="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}"><b>${o[0]}</b><small>${o[1]}</small></button>`).join('')}</div>`;
+      <div class="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}"><span class="key" aria-hidden="true">${"ABCD"[i]}</span><b>${o[0]}</b><small>${o[1]}</small></button>`).join('')}</div>`;
     box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const o=q.o[+b.dataset.i]; if(qs.step===0) qs.picks=o[2]; else qs.type=o[2]; qs.step++; renderQuiz();});
   } else {
     box.innerHTML=`<h2>Skill finder <span class="mute">done</span></h2><p class="q">Here's what your client needs, as a ${qs.type==='sub'?'freelance retainer':'freelance project'}.</p>
