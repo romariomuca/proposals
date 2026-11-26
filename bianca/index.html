@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>bianca — racconto storie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* VOICE: minuscolo, ironico, vulnerabile: una che sbaglia volentieri e lo dice
+   IDEA: la classifica "best of" di una rivista in alto, l'indice di uno studio editoriale per raccontarsi
+   PICTURE: i ritagli del banner incastrati nelle parole; 12 video verticali numerati ai lati
+   COLOUR and TYPE: grigio carta #f1f0ed, inchiostro nero, lilla del logo come accento; Inter Tight + Instrument Serif
+   LAYOUT: binari fissi di video; hero, poi i filtri dei lavori, poi chi è lei a griglia con righe sottili */
+:root{color-scheme:light;--bg:#f1f0ed;--ink:#111;--mute:#8d8a85;--lil:#a98be0;--lil2:#6f52b8;--rail:132px}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 "Inter Tight",system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{display:block}
+::selection{background:var(--lil);color:#fff}
+sup{font-size:.36em;vertical-align:.95em;font-family:"Inter Tight",sans-serif;font-weight:400;letter-spacing:0;margin-left:.08em}
+
+/* ---------- binari video ---------- */
+.rail{position:fixed;top:0;bottom:0;width:var(--rail);display:flex;flex-direction:column;justify-content:space-between;padding:18px 0;z-index:5}
+.rail.l{left:14px}.rail.r{right:14px;align-items:flex-end}
+.it{position:relative;display:flex;align-items:center;gap:9px;text-decoration:none;transition:opacity .35s,filter .35s}
+.rail.r .it{flex-direction:row-reverse}
+.it img{height:calc((100dvh - 36px - 5*10px)/6);max-height:150px;aspect-ratio:9/16;width:auto;object-fit:cover;background:#ddd;transition:transform .35s,outline-color .35s;outline:2px solid transparent;outline-offset:3px}
+.it .n{font-size:13px;font-variant-numeric:tabular-nums}
+.it .tip{position:absolute;top:50%;transform:translateY(-50%);left:calc(100% + 8px);width:200px;background:var(--ink);color:#fff;font-size:13px;line-height:1.35;padding:8px 10px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
+.rail.r .it .tip{left:auto;right:calc(100% + 8px)}
+.it .tip small{display:block;color:#bbb;font-size:12px;margin-top:2px}
+.it:hover .tip,.it:focus-visible .tip{opacity:1}
+.it:hover img{transform:scale(1.04)}
+.it:focus-visible{outline:none}.it:focus-visible img{outline-color:var(--ink)}
+body.f .it:not(.on){opacity:.12;filter:grayscale(1)}
+body.f .it.on img{outline-color:var(--lil);transform:scale(1.07)}
+
+/* ---------- centro ---------- */
+main{margin:0 calc(var(--rail) + 40px)}
+.top{display:flex;flex-direction:column;align-items:center;padding-top:22px;gap:2px}
+.top img{width:58px;mix-blend-mode:multiply}
+.top b{font-weight:500;font-size:19px;letter-spacing:-.02em;line-height:1}
+.top span{font-size:13px;color:var(--mute)}
+
+.hero{min-height:calc(100dvh - 110px);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:30px 0 60px}
+h1{margin:0;font-weight:500;font-size:clamp(46px,8.6vw,148px);line-height:1.02;letter-spacing:-.05em;display:flex;flex-direction:column}
+h1 .ln{white-space:nowrap}
+h1 .ln:nth-child(2){padding-left:1.1em}
+h1 .ln:nth-child(4){padding-left:.5em}
+.t{display:inline-block;width:.74em;height:.74em;vertical-align:-.04em;margin:0 .02em;overflow:hidden;animation:pop .7s cubic-bezier(.2,1.4,.4,1) both;animation-delay:calc(var(--d,0)*110ms + 200ms)}
+.t.w{width:1.5em}
+.t img{width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply}
+@keyframes pop{from{transform:scale(.4) rotate(-8deg);opacity:0}}
+.sub{margin-top:34px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 22px;font-size:15px}
+.sub span:nth-child(even){color:var(--mute)}
+
+.band{padding:clamp(56px,8vw,110px) 0;border-top:1px solid #d9d6d0}
+.lab{font-size:13px;color:var(--mute);margin:0 0 22px}
+
+/* filtri lavori */
+.brands h2{font-weight:500;font-size:clamp(32px,4.4vw,56px);line-height:1.04;letter-spacing:-.04em;margin:0 0 18px;text-wrap:balance}
+.brands .intro{max-width:600px;margin:0 0 36px;font-size:17px}
+.bl{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+.bl button{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) auto;gap:6px 24px;align-items:baseline;padding:16px 4px;border-bottom:1px solid #cfccc6;transition:background .2s,padding .25s}
+.bl .lg{height:.9em;width:auto;max-width:3.2em;object-fit:contain;display:inline-block;vertical-align:-.1em;margin-right:.35em;mix-blend-mode:multiply}
+.bl button[aria-pressed=true] .lg{filter:invert(1);mix-blend-mode:screen}
+.bl .bn{font-size:clamp(24px,2.8vw,38px);font-weight:500;letter-spacing:-.035em;line-height:1.1}
+.bl .bd{font-size:15px;color:#444}
+.bl .bc{font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bl button:hover{background:#e8e6e1}
+.bl button:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.bl button[aria-pressed=true]{background:var(--ink);color:#fff;padding-left:16px}
+.bl button[aria-pressed=true] .bd{color:#ddd}
+.bl button[aria-pressed=true] .bc{color:var(--lil)}
+.status{min-height:26px;margin-top:16px;font-size:15px}
+.status b{font-weight:500;color:var(--lil2)}
+.reset{all:unset;cursor:pointer;text-decoration:underline;text-underline-offset:3px;margin-left:10px;color:var(--mute)}
+
+/* chi è lei: stile indice editoriale */
+.ab{border-top:1px solid var(--ink);padding-bottom:clamp(40px,6vw,80px)}
+.ab .row{border-bottom:1px solid var(--ink)}
+.ab .k{font-size:12px;padding:7px 0 0;margin:0;display:flex;justify-content:space-between}
+.ab .k span:last-child{color:var(--mute)}
+.ab .k sup{font-size:9px;vertical-align:4px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.two>div{padding:0 28px 22px 0}
+.two>div+div{border-left:1px solid var(--ink);padding:0 0 22px 28px}
+.two p{margin:10px 0 0;font:15px/1.32 "Instrument Serif",Georgia,serif;text-align:justify;hyphens:auto}
+.two p+p{text-indent:2.5em;margin-top:2px}
+.two p.k{font:12px "Inter Tight",sans-serif;text-align:left;text-indent:0;margin:0}
+.two .u{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+.huge{margin:14px 0 22px;font:300 clamp(34px,5.3vw,88px)/1.02 "Inter Tight",sans-serif;letter-spacing:-.045em}
+.huge .t{height:.8em;width:.8em;vertical-align:-.06em;margin:0 .03em}
+.huge .t.w{width:1.5em}
+.huge.serif{font-family:"Instrument Serif",serif;font-style:italic;font-weight:400;letter-spacing:-.015em;line-height:1.04}
+.huge em{font-family:"Inter Tight",sans-serif;font-style:normal;font-weight:300;letter-spacing:-.045em}
+.huge .sm{font:15px "Instrument Serif",serif;font-style:normal;letter-spacing:0;color:var(--mute)}
+
+/* scrittura */
+.write h2{font-weight:500;font-size:clamp(32px,4.4vw,56px);line-height:1.04;letter-spacing:-.04em;margin:0 0 18px}
+.posts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:28px}
+.post{display:grid;grid-template-columns:110px minmax(0,1fr);gap:18px;text-decoration:none;padding:16px;background:#fff;transition:transform .25s}
+.post:hover{transform:translateY(-3px)}
+.post img{width:110px;aspect-ratio:9/16;object-fit:cover;height:auto}
+.post h3{margin:0 0 8px;font:italic 400 28px/1.05 "Instrument Serif",serif}
+.post p{margin:0 0 10px;font-size:15px;color:#555}
+.post small{font-size:13px;color:var(--mute)}
+.wip{margin-top:30px;font-size:15px}
+.wip span{display:inline-block;background:var(--lil);color:#fff;padding:1px 8px;margin-right:8px;font-size:13px}
+
+/* contatti */
+.money{text-align:center}
+.money .k2{font-size:15px;color:var(--mute);margin:0 0 6px}
+.money .mail{font-weight:500;font-size:clamp(28px,5.4vw,78px);letter-spacing:-.05em;line-height:1;word-break:break-word}
+.money .mail a{text-decoration:none}
+.money .mail a:hover{color:var(--lil2)}
+.money p{max-width:520px;margin:20px auto 26px}
+.copy{all:unset;cursor:pointer;border:1px solid var(--ink);padding:11px 20px;font-size:15px;min-height:22px}
+.copy:hover{background:var(--ink);color:#fff}
+.copy:focus-visible{outline:2px solid var(--lil);outline-offset:3px}
+.soc{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 28px;margin-top:40px;font-size:15px}
+footer{padding:28px 0 40px;font-size:13px;color:var(--mute);text-align:center}
+
+/* ---------- mobile ---------- */
+@media(max-width:899px){
+  :root{--rail:0px}
+  main{margin:0 18px}
+  #mslot{position:sticky;top:0;z-index:6;margin:0 -18px 22px}
+  .rails{position:relative;background:rgba(241,240,237,.95);backdrop-filter:blur(8px);border-bottom:1px solid #d9d6d0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 18px;padding:12px 18px 10px;gap:10px;scrollbar-width:none}
+  .rails::-webkit-scrollbar{display:none}
+  .rail{position:static;flex:none;flex-direction:row;padding:0;width:auto;gap:10px}
+  .rail.r{flex-direction:row;align-items:flex-start}
+  .rail.r .it{flex-direction:column}
+  .it{flex:none;scroll-snap-align:start;flex-direction:column;gap:5px;width:calc((100vw - 36px - 20px)/3)}
+  .it img{width:100%;height:auto;max-height:none}
+  body.f .it.on img{transform:none}
+  .it .tip{display:none}
+  h1{font-size:clamp(40px,12.4vw,90px)}
+  .hero{min-height:auto;padding:70px 0 80px}
+  .bl button{grid-template-columns:minmax(0,1fr) auto}
+  .bl .bd{grid-column:1/-1;grid-row:2}
+  .posts,.two{grid-template-columns:minmax(0,1fr)}
+  .two>div+div{border-left:0;border-top:1px solid var(--ink);padding:0 0 22px}
+  .huge{font-size:clamp(30px,9vw,60px)}
+}
+@media(max-width:520px){
+  h1 .ln:nth-child(2){padding-left:.5em}
+  .post{grid-template-columns:84px minmax(0,1fr)}.post img{width:84px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="rails" aria-label="video e articoli">
+  <nav class="rail l" id="railL"></nav>
+  <nav class="rail r" id="railR"></nav>
+</div>
+
+<main>
+  <header class="top">
+    <img src="img/logo.png" alt="">
+    <b>bianca</b>
+    <span>@biancaiannu</span>
+  </header>
+
+  <section class="hero">
+    <h1 aria-label="racconto storie e sbaglio (facilmente)">
+      <span class="ln" aria-hidden="true">racc<span class="t" style="--d:0"><img src="img/b_faces.png" alt=""></span>nto</span>
+      <span class="ln" aria-hidden="true">st<span class="t" style="--d:1"><img src="img/b_sea.png" alt=""></span>rie <span class="t w" style="--d:2"><img src="img/b_desert.png" alt=""></span> e</span>
+      <span class="ln" aria-hidden="true">sb<span class="t" style="--d:3"><img src="img/b_whale.png" alt=""></span>glio <span class="t" style="--d:4"><img src="img/b_unicorn.png" alt=""></span></span>
+      <span class="ln" aria-hidden="true">(fac<span class="t" style="--d:5"><img src="img/b_girl.png" alt=""></span>lmente)</span>
+    </h1>
+    <div class="sub">
+      <span>attraversando l'asia senza voli</span>
+      <span>parlo 4 lingue</span>
+      <span>scriverò sul nyt</span>
+      <span>(segnatevelo)</span>
+    </div>
+  </section>
+
+  <section class="band brands" id="lavori">
+    <p class="lab">per chi l'ho fatto</p>
+    <h2>il lavoro finisce, il video resta.</h2>
+    <p class="intro">lavoro con istituzioni, ong e brand anche molto grandi. finita la campagna, di solito non c'è scritto da nessuna parte. allora lo scrivo qui. clicca un nome: gli altri video si fanno da parte.</p>
+    <div id="mslot"></div>
+    <ul class="bl" id="bl"></ul>
+    <p class="status" id="status" aria-live="polite"></p>
+  </section>
+
+  <section class="ab" id="chi">
+    <div class="row two">
+      <div>
+        <p class="k"><span>chi sono<sup>(IT)</sup></span></p>
+        <p>faccio gran bei video, gianca**o. scrivo, filmo e m'immergo: con la musica nei viaggi, coi balli nelle parole, per raccontare <span class="u">il mondo, le persone, le emozioni, gli oceani</span>, e pure la geopolitica quando c'ho voglia di farmi offendere. non è colpa mia: riporto solo quello che ho studiato.</p>
+        <p>negli anni mi sono fatta uno stile mio e, onestamente, sono molto brava. presto tutto questo diventa long form su youtube. vorrei semplificarmi in "influencer" ma non mi è più possibile: mi sto per lanciare da un grattacielo, e coi social ci sto solo costruendo <span class="u">belle ali</span>.</p>
+        <p>scusate la lunghezza, stasera sono egocentrica.</p>
+      </div>
+      <div>
+        <p class="k"><span>about<sup>(EN)</sup></span></p>
+        <p>i make really good videos. i write, film and dive in: with music while travelling, dancing with words, to tell stories about <span class="u">the world, people, emotions, oceans</span>, and geopolitics too, when i feel like getting insulted. not my fault: i only report what i've studied.</p>
+        <p>over the years i've built a style of my own and, honestly, i'm very good at it. long form on youtube is coming soon. i'd love to call myself an "influencer", but i can't anymore: i'm about to jump off a skyscraper, and social media is how i'm building <span class="u">nice wings</span>.</p>
+        <p>sorry for the length, i'm feeling self-centred tonight.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <p class="k"><span>cosa racconto</span><span>(video, parole, immersioni)</span></p>
+      <p class="huge">il mondo,<span class="t"><img src="img/b_sea.png" alt=""></span><span class="t"><img src="img/b_faces.png" alt=""></span> le persone,
+      le emozioni, <span class="t"><img src="img/b_girl.png" alt=""></span><span class="t"><img src="img/b_creature.png" alt=""></span><span class="t"><img src="img/c_ig3.jpg" alt=""></span> gli oceani,
+      la musica, i balli,<span class="t"><img src="img/b_unicorn.png" alt=""></span> i viaggi senza voli, <span class="t w"><img src="img/b_desert.png" alt=""></span>
+      e pure la geopolitica<span class="t"><img src="img/b_map.png" alt=""></span> <span class="sm">(quando c'ho voglia di farmi offendere)</span></p>
+    </div>
+
+    <div class="row">
+      <p class="k"><span>credo che</span><span>4 lingue · asia via terra · nyt, prima o poi</span></p>
+      <p class="huge serif">tutto sia relativo, <em>di essere privilegiata,</em><span class="t"><img src="img/b_whale.png" alt=""></span> e che la fortuna più grande dell'uomo sia <em>interagire con un altro uomo.</em></p>
+    </div>
+  </section>
+
+  <section class="band write" id="scrivo">
+    <p class="lab">scrivo anche (lentamente)</p>
+    <h2>il substack di blanche</h2>
+    <div class="posts">
+      <a class="post" href="https://biancaiannu.substack.com/p/voglio-uccidere-il-re-e-sono-la-regina" target="_blank" rel="noopener">
+        <img src="img/c_ss1.jpg" alt="">
+        <div><h3>voglio uccidere il re e sono la regina</h3><p>il problema dei social, da una che ci lavora coi social.</p><small>30 ottobre 2026 · leggi →</small></div>
+      </a>
+      <a class="post" href="https://biancaiannu.substack.com/p/chi-racconta-la-cina-come-un-problema" target="_blank" rel="noopener">
+        <img src="img/c_ss2.jpg" alt="">
+        <div><h3>la metà della verità sull'altra superpotenza del mondo</h3><p>come viene raccontata la cina in occidente, e come dovrebbe esserlo.</p><small>16 ottobre 2026 · leggi →</small></div>
+      </a>
+    </div>
+    <p class="wip"><span>work in progress</span>youtube long form. ci sto lavorando, non mettetemi fretta.</p>
+  </section>
+
+  <section class="band money" id="money">
+    <p class="k2">money:</p>
+    <div class="mail"><a href="mailto:bianca@chimeragency.it">bianca@chimeragency.it</a></div>
+    <p>per campagne, collaborazioni, o per dirmi che ho sbagliato. lo accetto facilmente.</p>
+    <button class="copy" id="copy" type="button">copia l'indirizzo</button>
+    <div class="soc">
+      <a href="https://www.youtube.com/@biancaiannu" target="_blank" rel="noopener">youtube</a>
+      <a href="https://www.instagram.com/biancaiannu/" target="_blank" rel="noopener">instagram</a>
+      <a href="https://biancaiannu.substack.com" target="_blank" rel="noopener">substack</a>
+    </div>
+  </section>
+
+  <footer>bianca · gestita da chimera agency · bozza: le copertine e gli abbinamenti ai brand sono provvisori</footer>
+</main>
+
+<script>
+{
+const V=[
+ {n:1,p:'youtube',t:'capelli più belli meglio che bella personalità',u:'https://www.youtube.com/shorts/5qXdM86foos',c:'c_yt1.jpg',b:['garnier']},
+ {n:2,p:'youtube',t:"cosa ne pensate dell'amore?",u:'https://www.youtube.com/shorts/-RtsAzL1zyU',c:'c_yt2.jpg',b:[]},
+ {n:3,p:'youtube',t:'nostalgica',u:'https://www.youtube.com/shorts/X0nYYbBbdXg',c:'c_yt3.jpg',b:[]},
+ {n:4,p:'youtube',t:'risoluzione 2026',u:'https://www.youtube.com/shorts/Ggw23Akg7CA',c:'c_yt4.jpg',b:[]},
+ {n:5,p:'youtube',t:"l'unica verità universale",u:'https://www.youtube.com/shorts/LaAemqd-VIU',c:'c_yt5.jpg',b:[]},
+ {n:6,p:'substack',t:'voglio uccidere il re e sono la regina',u:'https://biancaiannu.substack.com/p/voglio-uccidere-il-re-e-sono-la-regina',c:'c_ss1.jpg',b:[]},
+ /* loghi: metti i file in img/logos/ e scrivi il nome in logo, es. logo:'ue.svg' */
+ /* reel instagram: abbinamenti ai brand PROVVISORI, da correggere qui */
+ {n:7,p:'instagram',t:'reel',u:'https://www.instagram.com/reel/DIb8B-FI4f9/',c:'c_ig1.jpg',b:['esim']},
+ {n:8,p:'instagram',t:'reel',u:'https://www.instagram.com/reel/DgC9SFTgNSz/',c:'c_ig2.jpg',b:['samsung']},
+ {n:9,p:'instagram',t:'reel',u:'https://www.instagram.com/reel/DfxgEhOTdOz/',c:'c_ig3.jpg',b:['ue']},
+ {n:10,p:'instagram',t:'reel',u:'https://www.instagram.com/reel/DfMXNItACaq/',c:'c_ig4.jpg',b:['acf']},
+ {n:11,p:'instagram',t:'reel',u:'https://www.instagram.com/reel/DfHF9X4AszO/',c:'c_ig5.jpg',b:['actionaid']},
+ {n:12,p:'substack',t:"la metà della verità sull'altra superpotenza del mondo",u:'https://biancaiannu.substack.com/p/chi-racconta-la-cina-come-un-problema',c:'c_ss2.jpg',b:[]}
+];
+const B=[
+ {id:'ue',logo:null,n:'unione europea',d:'campagne di sensibilizzazione sugli aiuti umanitari. sì, quelle serie.'},
+ {id:'acf',n:'azione contro la fame',d:'vabbè, lo dice il nome.'},
+ {id:'actionaid',n:'actionaid',d:'ci ho lavorato, e ne vado fiera.'},
+ {id:'samsung',n:'samsung',d:'anche la tecnologia ha bisogno di qualcuno che la racconti bene.'},
+ {id:'esim',n:'esim varie',d:"per attraversare l'asia senza voli servono giga. tanti."},
+ {id:'garnier',n:"garnier · l'oréal",d:'capelli più belli, meglio che bella personalità.'}
+];
+const item=v=>`<a class="it" href="${v.u}" target="_blank" rel="noopener" data-b="${v.b.join(' ')}"><img src="img/${v.c}" alt="${v.p}: ${v.t}" loading="lazy"><span class="n">(${v.n})</span><span class="tip">${v.t}<small>${v.p}</small></span></a>`;
+document.getElementById('railL').innerHTML=V.slice(0,6).map(item).join('');
+document.getElementById('railR').innerHTML=V.slice(6).map(item).join('');
+
+const cnt=id=>V.filter(v=>v.b.includes(id)).length;
+const bl=document.getElementById('bl');
+bl.innerHTML=B.map(b=>`<li><button type="button" aria-pressed="false" data-id="${b.id}"><span class="bn">${b.logo?`<img class="lg" src="img/logos/${b.logo}" alt="">`:''}${b.n}</span><span class="bd">${b.d}</span><span class="bc">(${cnt(b.id)} video)</span></button></li>`).join('');
+
+/* su mobile la striscia dei video sta sopra i filtri, fissa mentre scorri */
+const rails=document.querySelector('.rails'),slot=document.getElementById('mslot'),mq=matchMedia('(max-width:899px)');
+const place=()=>{if(mq.matches){slot.append(rails)}else{document.body.prepend(rails)}};
+place();mq.addEventListener('change',place);
+const status=document.getElementById('status');
+let cur=null;
+const apply=id=>{
+  cur=id;
+  document.body.classList.toggle('f',!!id);
+  document.querySelectorAll('.it').forEach(a=>a.classList.toggle('on',!!id&&a.dataset.b.split(' ').includes(id)));
+  bl.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.id===id)));
+  status.textContent='';
+  if(!id)return;
+  const nums=V.filter(v=>v.b.includes(id)).map(v=>'('+v.n+')').join(' ');
+  const b=document.createElement('b');b.textContent=nums||'nessun video, per ora';
+  const r=document.createElement('button');r.className='reset';r.type='button';r.textContent='mostra tutto';r.onclick=()=>apply(null);
+  status.append('ecco dove sta scritto: ',b,' per '+B.find(x=>x.id===id).n+'.',r);
+  if(innerWidth<900){const f=document.querySelector('.it.on');f&&rails.scrollTo({left:f.offsetLeft-18,behavior:'smooth'})}
+};
+bl.addEventListener('click',e=>{const b=e.target.closest('button');if(b)apply(cur===b.dataset.id?null:b.dataset.id)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&cur)apply(null)});
+
+const cp=document.getElementById('copy');
+cp.addEventListener('click',async()=>{try{await navigator.clipboard.writeText('bianca@chimeragency.it');cp.textContent='copiato. ora scrivimi.'}catch(_){cp.textContent='bianca@chimeragency.it'}setTimeout(()=>cp.textContent="copia l'indirizzo",2400)});
+}
+</script>
+</body>
+</html>
